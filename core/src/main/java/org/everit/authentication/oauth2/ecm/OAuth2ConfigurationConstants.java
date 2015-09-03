@@ -51,7 +51,7 @@ public final class OAuth2ConfigurationConstants {
   public static final String PROP_TOKEN_ENDPOINT = "token.endpoint";
 
   public static final String SERVICE_FACTORYPID_OAUTH2_CONFIGURATION =
-      "org.everit.authentication.oauth2.OAuth2Configuration";
+      "org.everit.authentication.oauth2.ecm.OAuth2Configuration";
 
   private OAuth2ConfigurationConstants() {
   }

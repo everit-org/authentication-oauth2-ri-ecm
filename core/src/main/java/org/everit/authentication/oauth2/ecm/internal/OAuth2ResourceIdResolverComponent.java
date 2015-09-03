@@ -17,7 +17,7 @@ package org.everit.authentication.oauth2.ecm.internal;
 
 import java.util.Optional;
 
-import org.everit.authentication.oauth2.ri.OAuth2ResourceIdResolverImpl;
+import org.everit.authentication.oauth2.ri.internal.OAuth2ResourceIdResolverImpl;
 import org.everit.osgi.ecm.annotation.Activate;
 import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;

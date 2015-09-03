@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.everit.authentication.oauth2.OAuth2Configuration;
-import org.everit.authentication.oauth2.OAuth2RequestURIResolver;
+import org.everit.authentication.oauth2.OAuth2UserIdResolver;
 import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationConstants;
-import org.everit.authentication.oauth2.ri.OAuth2AuthenticationServlet;
+import org.everit.authentication.oauth2.ri.internal.OAuth2AuthenticationServlet;
 import org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames;
 import org.everit.osgi.ecm.annotation.Activate;
 import org.everit.osgi.ecm.annotation.Component;
@@ -80,9 +80,9 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet {
 
   private OAuth2Configuration oauth2Configuration;
 
-  private String redirectEndpointPath;
+  private OAuth2UserIdResolver oauth2UserIdResolver;
 
-  private OAuth2RequestURIResolver requestURIResolver;
+  private String redirectEndpointPath;
 
   private ResourceIdResolver resourceIdResolver;
 
@@ -95,7 +95,7 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet {
   public void activate() {
     oauth2AuthenticationServlet = new OAuth2AuthenticationServlet(
         authenticationSessionAttributeNames, failedUrl, loginEndpointPath, oauth2Configuration,
-        redirectEndpointPath, requestURIResolver, resourceIdResolver, successUrl);
+        redirectEndpointPath, oauth2UserIdResolver, resourceIdResolver, successUrl);
   }
 
   @Deactivate
@@ -147,16 +147,16 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet {
     this.oauth2Configuration = oauth2Configuration;
   }
 
+  @ServiceRef(attributeId = OAuth2AuthenticationConstants.PROP_REQUEST_URI_RESOLVER,
+      defaultValue = "")
+  public void setOAuth2UserIdResolver(final OAuth2UserIdResolver oauth2UserIdResolver) {
+    this.oauth2UserIdResolver = oauth2UserIdResolver;
+  }
+
   @StringAttribute(attributeId = OAuth2AuthenticationConstants.PROP_REDIRECT_ENDPOINT_PATH,
       defaultValue = OAuth2AuthenticationConstants.DEFAULT_REDIRECT_ENDPOINT_PATH)
   public void setRedirectEndpointPath(final String redirectEndpointPath) {
     this.redirectEndpointPath = redirectEndpointPath;
-  }
-
-  @ServiceRef(attributeId = OAuth2AuthenticationConstants.PROP_REQUEST_URI_RESOLVER,
-      defaultValue = "")
-  public void setRequestURIResolver(final OAuth2RequestURIResolver requestURIResolver) {
-    this.requestURIResolver = requestURIResolver;
   }
 
   @ServiceRef(attributeId = OAuth2AuthenticationConstants.PROP_RESOURCE_ID_RESOLVER,

@@ -48,14 +48,14 @@ public final class OAuth2AuthenticationConstants {
 
   public static final String PROP_REDIRECT_ENDPOINT_PATH = "redirect.endpoint.path";
 
-  public static final String PROP_REQUEST_URI_RESOLVER = "requestURIResolver.target";
+  public static final String PROP_REQUEST_URI_RESOLVER = "oauth2UserIdResolver.target";
 
   public static final String PROP_RESOURCE_ID_RESOLVER = "resourceIdResolver.target";
 
   public static final String PROP_SUCCESS_URL = "success.url";
 
   public static final String SERVICE_FACTORYPID_OAUTH2_AUTHENTICATION_SERVLET =
-      "org.everit.authentication.oauth2.OAuth2AuthenticationServlet";
+      "org.everit.authentication.oauth2.ecm.OAuth2AuthenticationServlet";
 
   private OAuth2AuthenticationConstants() {
   }
