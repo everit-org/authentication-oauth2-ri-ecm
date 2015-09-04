@@ -1,0 +1,58 @@
+<!--
+
+    Copyright (C) 2011 Everit Kft. (http://www.everit.org)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Everit Authentication OAuth2 Sample - Success Login</title>
+<meta name="author" content="" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+  <div data-eht-render="hasLogged ? 'all' : 'none'">
+    <p>Success login</p>
+    <br />
+    <p>Full name in OAuth2 server: <span data-eht-text="fullName"></span></p>
+    <br />
+    <p>Saved users with OAuth2 Resource ID Resolver:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Resource id</th>
+          <th>Provider name</th>
+          <th>Unique user id</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-eht-foreach="['user' : users]">
+          <td data-eht-text="user.resourceId"></td>
+          <td data-eht-text="user.providerName"></td>
+          <td data-eht-text="user.uniqueUserId"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div data-eht-render="!hasLogged ? 'all' : 'none'">
+    <p>
+      Protected page! Login first in <a href="/index">index</a> page.
+    </p>
+  </div>
+</body>
+
+</html>

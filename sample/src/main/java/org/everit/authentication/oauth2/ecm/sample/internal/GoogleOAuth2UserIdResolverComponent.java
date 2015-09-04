@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.everit.authentication.oauth2.ecm.sample;
+package org.everit.authentication.oauth2.ecm.sample.internal;
 
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
@@ -34,13 +34,13 @@ import com.google.gson.JsonObject;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * The Facebook specific {@link OAuth2UserIdResolver} implementation.
+ * The Google specific {@link OAuth2UserIdResolver} implementation.
  */
 @Component
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
-@Service
-public class FacebookOAuth2UserIdResolverComponent implements OAuth2UserIdResolver {
+@Service(value = { OAuth2UserIdResolver.class, GoogleOAuth2UserIdResolverComponent.class })
+public class GoogleOAuth2UserIdResolverComponent implements OAuth2UserIdResolver {
 
   private String requestURI;
 
@@ -60,10 +60,10 @@ public class FacebookOAuth2UserIdResolverComponent implements OAuth2UserIdResolv
       throw new RuntimeException(e);
     }
     JsonObject fromJson = new Gson().fromJson(resourceResponse.getBody(), JsonObject.class);
-    return fromJson.get("id").toString();
+    return fromJson.get("id").toString() + "_" + fromJson.get("name").toString();
   }
 
-  @StringAttribute(defaultValue = "https://graph.facebook.com/v2.4/me")
+  @StringAttribute(defaultValue = "https://www.googleapis.com/userinfo/v2/me")
   public void setRequestURI(final String requestURI) {
     this.requestURI = requestURI;
   }

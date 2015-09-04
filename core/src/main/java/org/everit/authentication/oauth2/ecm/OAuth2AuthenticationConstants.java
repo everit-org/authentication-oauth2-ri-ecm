@@ -55,7 +55,7 @@ public final class OAuth2AuthenticationConstants {
   public static final String PROP_SUCCESS_URL = "success.url";
 
   public static final String SERVICE_FACTORYPID_OAUTH2_AUTHENTICATION_SERVLET =
-      "org.everit.authentication.oauth2.ecm.OAuth2AuthenticationServlet";
+      "org.everit.authentication.oauth2.ecm.internal.OAuth2AuthenticationServlet";
 
   private OAuth2AuthenticationConstants() {
   }

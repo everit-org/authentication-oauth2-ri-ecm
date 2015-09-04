@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.everit.authentication.oauth2.ecm.sample;
+package org.everit.authentication.oauth2.ecm.sample.internal;
 
 import java.util.function.Supplier;
 
@@ -33,6 +33,13 @@ import aQute.bnd.annotation.headers.ProvideCapability;
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @Service
 public class Dummies implements AuthenticationPropagator {
+
+  // TODO tests jetty bekonfigurálva féliaz oauth leírva hogy kell konfigurálni.
+  // publikus login oldal, google,fb login, sikeres login. Teljes nev megjelentés irjuk ki a db-be
+  // mentet rekordokat azon az oldalon még.
+  // TODO loguot (token invalnidálás oauth serveren) + redirect a sessionauthenticationcomponentre
+  // (logouturl-jére)
+  // sessionauthenticationcompoenent a servletcontextfactorybe konfirurálni + filter.
 
   @Override
   public <T> T runAs(final long authenticatedResourceId, final Supplier<T> authenticatedAction) {

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.everit.authentication.oauth2.OAuth2Configuration;
 import org.everit.authentication.oauth2.OAuth2UserIdResolver;
 import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationConstants;
+import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
 import org.everit.authentication.oauth2.ri.internal.OAuth2AuthenticationServlet;
 import org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames;
 import org.everit.osgi.ecm.annotation.Activate;
@@ -57,18 +58,10 @@ import aQute.bnd.annotation.headers.ProvideCapability;
     @StringAttribute(attributeId = OAuth2AuthenticationConstants.PROP_PROVIDER_NAME,
         defaultValue = OAuth2AuthenticationConstants.DEFAULT_PROVIDER_NAME)
 })
-@Service(value = { Servlet.class, OAuth2AuthenticationServletComponent.class })
-public class OAuth2AuthenticationServletComponent extends HttpServlet {
-
-  // TODO nyilvanos api Oauth2Configuration, RequestUriResolver
-  // TODO ri/api, ri-core, ri-schema
-  // TODO tests jetty bekonfigurálva féliaz oauth leírva hogy kell konfigurálni.
-  // sample-google,sample-facebook
-  // publikus login oldal, google,fb login, sikeres login. Teljes nev megjelentés irjuk ki a db-be
-  // mentet rekordokat azon az oldalon még.
-  // TODO loguot (token invalnidálás oauth serveren) + redirect a sessionauthenticationcomponentre
-  // (logouturl-jére)
-  // sessionauthenticationcompoenent a servletcontextfactorybe konfirurálni + filter.
+@Service(value = { Servlet.class, OAuth2AuthenticationServletComponent.class,
+    OAuth2SessionAttributeNames.class })
+public class OAuth2AuthenticationServletComponent extends HttpServlet
+    implements OAuth2SessionAttributeNames {
 
   private AuthenticationSessionAttributeNames authenticationSessionAttributeNames;
 
@@ -113,6 +106,31 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet {
   public void init(final ServletConfig pConfig) throws ServletException {
     super.init(pConfig);
     oauth2AuthenticationServlet.init(pConfig);
+  }
+
+  @Override
+  public String oauth2AccessToken() {
+    return oauth2AuthenticationServlet.oauth2AccessToken();
+  }
+
+  @Override
+  public String oauth2AccessTokenExpiresIn() {
+    return oauth2AuthenticationServlet.oauth2AccessTokenExpiresIn();
+  }
+
+  @Override
+  public String oauth2RefreshToken() {
+    return oauth2AuthenticationServlet.oauth2RefreshToken();
+  }
+
+  @Override
+  public String oauth2Scope() {
+    return oauth2AuthenticationServlet.oauth2Scope();
+  }
+
+  @Override
+  public String oauth2TokenType() {
+    return oauth2AuthenticationServlet.oauth2TokenType();
   }
 
   @Override
