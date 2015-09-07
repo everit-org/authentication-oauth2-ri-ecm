@@ -16,9 +16,8 @@
 package org.everit.authentication.oauth2.ecm.sample.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -59,12 +58,7 @@ public class IndexServletComponent extends AbstractServlet {
     resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
     resp.setContentType("text/html");
 
-    Map<String, Object> vars = new HashMap<>();
-    String servletPath = req.getServletPath();
-    if ("/logout".equals(servletPath)) {
-      vars.put("logoutMsg", "Logout ......");
-    }
-
-    pageTemplate.render(resp.getWriter(), vars, null);
+    PrintWriter writer = resp.getWriter();
+    writer.write(pageContent);
   }
 }

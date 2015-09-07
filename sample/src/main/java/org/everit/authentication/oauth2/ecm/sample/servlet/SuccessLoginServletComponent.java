@@ -16,10 +16,9 @@
 package org.everit.authentication.oauth2.ecm.sample.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -132,12 +131,21 @@ public class SuccessLoginServletComponent extends AbstractServlet {
       throws IOException {
     resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
     resp.setContentType("text/html");
-    Map<String, Object> vars = new HashMap<>();
-    vars.put("fullName", fullName);
-    vars.put("users", selectAllSavedUser());
-    vars.put("hasLogged", true); // TODO
+    pageContent = pageContent.replace("${FULLNAME}", fullName);
 
-    pageTemplate.render(resp.getWriter(), vars, null);
+    String usersContent = "";
+    List<User> users = selectAllSavedUser();
+    for (User user : users) {
+      usersContent += "<tr>";
+      usersContent += "<td>" + user.resourceId + "</td>";
+      usersContent += "<td>" + user.providerName + "</td>";
+      usersContent += "<td>" + user.uniqueUserId + "</td>";
+      usersContent += "</tr>";
+    }
+    pageContent = pageContent.replace("${USERS}", usersContent);
+
+    PrintWriter writer = resp.getWriter();
+    writer.write(pageContent);
   }
 
   private List<User> selectAllSavedUser() {

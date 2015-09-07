@@ -25,10 +25,10 @@
 </head>
 
 <body>
-  <div data-eht-render="hasLogged ? 'all' : 'none'">
+  <div>
     <p>Success login</p>
     <br />
-    <p>Full name in OAuth2 server: <span data-eht-text="fullName"></span></p>
+    <p>Full name in OAuth2 server: ${FULLNAME}</p>
     <br />
     <p>Saved users with OAuth2 Resource ID Resolver:</p>
     <table>
@@ -40,18 +40,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr data-eht-foreach="['user' : users]">
-          <td data-eht-text="user.resourceId"></td>
-          <td data-eht-text="user.providerName"></td>
-          <td data-eht-text="user.uniqueUserId"></td>
-        </tr>
+        ${USERS}
       </tbody>
     </table>
-  </div>
-  <div data-eht-render="!hasLogged ? 'all' : 'none'">
-    <p>
-      Protected page! Login first in <a href="/index">index</a> page.
-    </p>
   </div>
 </body>
 
