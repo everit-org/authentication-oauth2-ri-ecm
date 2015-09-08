@@ -20,7 +20,16 @@ package org.everit.authentication.oauth2.ecm;
  */
 public final class OAuth2ResourceIdResolverConstants {
 
+  public static final String DEFAULT_PROVIDER_NAME =
+      "Write provider name. Example: google or facebok";
+
+  public static final String DEFAULT_PROVIDER_NAME_TARGET = "(MUST_BE_SET=TO_SOMETHING)";
+
   public static final String PROP_PROPERTY_MANAGER = "propertyManager.target";
+
+  public static final String PROP_PROVIDER_NAME = "provider.name";
+
+  public static final String PROP_PROVIDER_NAME_TARGET = "provider.name.target";
 
   public static final String PROP_QUERYDSL_SUPPORT = "querydslSupport.target";
 

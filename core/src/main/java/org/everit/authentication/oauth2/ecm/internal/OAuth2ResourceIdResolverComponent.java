@@ -17,6 +17,9 @@ package org.everit.authentication.oauth2.ecm.internal;
 
 import java.util.Optional;
 
+import org.everit.authentication.oauth2.OAuth2Configuration;
+import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationConstants;
+import org.everit.authentication.oauth2.ecm.OAuth2ConfigurationConstants;
 import org.everit.authentication.oauth2.ecm.OAuth2ResourceIdResolverConstants;
 import org.everit.authentication.oauth2.ri.internal.OAuth2ResourceIdResolverImpl;
 import org.everit.osgi.ecm.annotation.Activate;
@@ -25,12 +28,17 @@ import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
 import org.everit.osgi.ecm.annotation.Deactivate;
 import org.everit.osgi.ecm.annotation.Service;
 import org.everit.osgi.ecm.annotation.ServiceRef;
+import org.everit.osgi.ecm.annotation.attribute.StringAttribute;
+import org.everit.osgi.ecm.annotation.attribute.StringAttributes;
+import org.everit.osgi.ecm.component.ServiceHolder;
 import org.everit.osgi.ecm.extender.ECMExtenderConstants;
 import org.everit.osgi.props.PropertyManager;
 import org.everit.osgi.querydsl.support.QuerydslSupport;
 import org.everit.osgi.resource.ResourceService;
 import org.everit.osgi.resource.resolver.ResourceIdResolver;
 import org.everit.osgi.transaction.helper.api.TransactionHelper;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 
 import aQute.bnd.annotation.headers.ProvideCapability;
 
@@ -39,13 +47,21 @@ import aQute.bnd.annotation.headers.ProvideCapability;
  */
 @Component(
     componentId = OAuth2ResourceIdResolverConstants.SERVICE_FACTORYPID_OAUTH2_RESOURCE_ID_RESOLVER,
-    configurationPolicy = ConfigurationPolicy.REQUIRE)
+    configurationPolicy = ConfigurationPolicy.FACTORY)
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
+@StringAttributes({
+    @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
+        defaultValue = OAuth2AuthenticationConstants.DEFAULT_SERVICE_DESCRIPTION),
+    @StringAttribute(attributeId = OAuth2ResourceIdResolverConstants.PROP_PROVIDER_NAME,
+        defaultValue = OAuth2ResourceIdResolverConstants.DEFAULT_PROVIDER_NAME)
+})
 @Service
 public class OAuth2ResourceIdResolverComponent implements ResourceIdResolver {
 
   private PropertyManager propertyManager;
+
+  private String providerName;
 
   private QuerydslSupport querydslSupport;
 
@@ -61,7 +77,7 @@ public class OAuth2ResourceIdResolverComponent implements ResourceIdResolver {
   @Activate
   public void activate() {
     resourceIdResolver = new OAuth2ResourceIdResolverImpl(propertyManager, querydslSupport,
-        resourceService, transactionHelper);
+        resourceService, transactionHelper, providerName);
   }
 
   @Deactivate
@@ -78,6 +94,17 @@ public class OAuth2ResourceIdResolverComponent implements ResourceIdResolver {
       defaultValue = "")
   public void setPropertyManager(final PropertyManager propertyManager) {
     this.propertyManager = propertyManager;
+  }
+
+  /**
+   * Sets provider name from {@link OAuth2Configuration}.
+   */
+  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_PROVIDER_NAME_TARGET,
+      defaultValue = OAuth2ResourceIdResolverConstants.DEFAULT_PROVIDER_NAME_TARGET)
+  public void setProviderName(final ServiceHolder<OAuth2Configuration> oauth2Configuration) {
+    ServiceReference<OAuth2Configuration> serviceReference = oauth2Configuration.getReference();
+    providerName = (String) serviceReference
+        .getProperty(OAuth2ConfigurationConstants.PROP_PROVIDER_NAME);
   }
 
   @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_QUERYDSL_SUPPORT,
