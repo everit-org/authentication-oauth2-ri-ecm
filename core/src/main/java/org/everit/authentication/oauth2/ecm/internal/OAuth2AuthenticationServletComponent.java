@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.everit.authentication.oauth2.OAuth2Configuration;
 import org.everit.authentication.oauth2.OAuth2UserIdResolver;
 import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationConstants;
+import org.everit.authentication.oauth2.ri.OAuth2AuthenticationServletParameter;
 import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
 import org.everit.authentication.oauth2.ri.internal.OAuth2AuthenticationServlet;
 import org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames;
@@ -86,9 +87,19 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet
    */
   @Activate
   public void activate() {
-    oauth2AuthenticationServlet = new OAuth2AuthenticationServlet(
-        authenticationSessionAttributeNames, failedUrl, loginEndpointPath, oauth2Configuration,
-        redirectEndpointPath, oauth2UserIdResolver, resourceIdResolver, successUrl);
+    OAuth2AuthenticationServletParameter oauth2AuthenticationServletParameter =
+        new OAuth2AuthenticationServletParameter()
+            .authenticationSessionAttributeNames(authenticationSessionAttributeNames)
+            .failedUrl(failedUrl)
+            .loginEndpointPath(loginEndpointPath)
+            .oauth2Configuration(oauth2Configuration)
+            .oauth2UserIdResolver(oauth2UserIdResolver)
+            .redirectEndpointPath(redirectEndpointPath)
+            .resourceIdResolver(resourceIdResolver)
+            .successUrl(successUrl);
+
+    oauth2AuthenticationServlet =
+        new OAuth2AuthenticationServlet(oauth2AuthenticationServletParameter);
   }
 
   @Deactivate
