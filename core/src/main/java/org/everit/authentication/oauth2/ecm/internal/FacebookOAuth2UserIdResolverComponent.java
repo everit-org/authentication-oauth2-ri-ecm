@@ -16,7 +16,6 @@
 package org.everit.authentication.oauth2.ecm.internal;
 
 import org.everit.authentication.oauth2.OAuth2UserIdResolver;
-import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationConstants;
 import org.everit.authentication.oauth2.ecm.OAuth2UserIdResolverConstants;
 import org.everit.authentication.oauth2.ri.internal.FacebookOAuth2UserIdResolverImpl;
 import org.everit.osgi.ecm.annotation.Activate;
@@ -40,7 +39,7 @@ import aQute.bnd.annotation.headers.ProvideCapability;
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
-        defaultValue = OAuth2AuthenticationConstants.DEFAULT_SERVICE_DESCRIPTION),
+        defaultValue = OAuth2UserIdResolverConstants.DEFAULT_SERVICE_DESCRIPTION_FACEBOOK),
     @StringAttribute(attributeId = OAuth2UserIdResolverConstants.PROP_PROVIDER_NAME,
         defaultValue = OAuth2UserIdResolverConstants.DEFAULT_PROVIDER_NAME_FACEBOOK)
 })
@@ -51,6 +50,9 @@ public class FacebookOAuth2UserIdResolverComponent implements OAuth2UserIdResolv
 
   private String userInformationRequestURI;
 
+  /**
+   * Component activator method.
+   */
   @Activate
   public void activate() {
     oauth2UserIdResolver = new FacebookOAuth2UserIdResolverImpl(userInformationRequestURI);

@@ -53,6 +53,9 @@ public class OAuth2ConfigurationComponent implements OAuth2Configuration {
 
   private String tokenEndpoint;
 
+  /**
+   * Component activator method.
+   */
   @Activate
   public void activate() {
     oauth2Configuration = new OAuth2ConfigurationImpl(authorizationEndpoint, clientId, clientSecret,

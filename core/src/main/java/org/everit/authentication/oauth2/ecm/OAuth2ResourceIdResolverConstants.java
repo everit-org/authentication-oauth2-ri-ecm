@@ -25,6 +25,8 @@ public final class OAuth2ResourceIdResolverConstants {
 
   public static final String DEFAULT_PROVIDER_NAME_TARGET = "(MUST_BE_SET=TO_SOMETHING)";
 
+  public static final String DEFAULT_SERVICE_DESCRIPTION = "Default OAuth2 Resource Id Resolver";
+
   public static final String PROP_PROPERTY_MANAGER = "propertyManager.target";
 
   public static final String PROP_PROVIDER_NAME = "provider.name";

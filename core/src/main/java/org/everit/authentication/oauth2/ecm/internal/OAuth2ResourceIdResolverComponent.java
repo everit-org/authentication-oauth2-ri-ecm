@@ -18,7 +18,6 @@ package org.everit.authentication.oauth2.ecm.internal;
 import java.util.Optional;
 
 import org.everit.authentication.oauth2.OAuth2Configuration;
-import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationConstants;
 import org.everit.authentication.oauth2.ecm.OAuth2ConfigurationConstants;
 import org.everit.authentication.oauth2.ecm.OAuth2ResourceIdResolverConstants;
 import org.everit.authentication.oauth2.ri.internal.OAuth2ResourceIdResolverImpl;
@@ -43,7 +42,7 @@ import org.osgi.framework.ServiceReference;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * OAuth2 ResourceIdResolver component.
+ * OAuth2 Resource Id Resolver component.
  */
 @Component(
     componentId = OAuth2ResourceIdResolverConstants.SERVICE_FACTORYPID_OAUTH2_RESOURCE_ID_RESOLVER,
@@ -52,7 +51,7 @@ import aQute.bnd.annotation.headers.ProvideCapability;
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
-        defaultValue = OAuth2AuthenticationConstants.DEFAULT_SERVICE_DESCRIPTION),
+        defaultValue = OAuth2ResourceIdResolverConstants.DEFAULT_SERVICE_DESCRIPTION),
     @StringAttribute(attributeId = OAuth2ResourceIdResolverConstants.PROP_PROVIDER_NAME,
         defaultValue = OAuth2ResourceIdResolverConstants.DEFAULT_PROVIDER_NAME)
 })

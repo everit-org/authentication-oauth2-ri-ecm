@@ -24,6 +24,12 @@ public final class OAuth2UserIdResolverConstants {
 
   public static final String DEFAULT_PROVIDER_NAME_GOOGLE = "google";
 
+  public static final String DEFAULT_SERVICE_DESCRIPTION_FACEBOOK =
+      "Default Facebook OAuth2 User Id Resolver";
+
+  public static final String DEFAULT_SERVICE_DESCRIPTION_GOOGLE =
+      "Default Google OAuth2 User Id Resolver";
+
   public static final String PROP_PROVIDER_NAME = "provider.name";
 
   public static final String PROP_USER_INFORMATION_REQUEST_URI = "user.information.request.uri";
