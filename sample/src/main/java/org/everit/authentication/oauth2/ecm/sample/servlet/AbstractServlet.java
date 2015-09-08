@@ -25,12 +25,15 @@ import org.everit.web.servlet.HttpServlet;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
 
+/**
+ * Abstract Servlet for read pages.
+ */
 public abstract class AbstractServlet extends HttpServlet {
 
   protected String pageContent;
 
   /**
-   * Compiles the layout template and sets the classLoader member variable.
+   * Read page content variable.
    */
   public void activate(final BundleContext bundleContext) {
     ClassLoader classLoader = bundleContext.getBundle().adapt(BundleWiring.class).getClassLoader();

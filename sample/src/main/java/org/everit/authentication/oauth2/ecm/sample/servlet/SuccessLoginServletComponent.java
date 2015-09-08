@@ -49,44 +49,19 @@ import org.osgi.framework.ServiceReference;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.mysema.query.Tuple;
 import com.mysema.query.sql.SQLQuery;
-import com.mysema.query.types.Projections;
 
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * Servlet that shows the index page.
+ * Servlet that shows the success login page.
  */
 @Component
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @Service(value = { Servlet.class, SuccessLoginServletComponent.class })
 public class SuccessLoginServletComponent extends AbstractServlet {
-
-  public static class User {
-
-    public String providerName;
-
-    public long resourceId;
-
-    public String uniqueUserId;
-
-    public User providerName(final String providerName) {
-      this.providerName = providerName;
-      return this;
-    }
-
-    public User resourceId(final long resourceId) {
-      this.resourceId = resourceId;
-      return this;
-    }
-
-    public User uniqueUserId(final String uniqueUserId) {
-      this.uniqueUserId = uniqueUserId;
-      return this;
-    }
-
-  }
 
   private String facebookRequestUri;
 
@@ -133,29 +108,30 @@ public class SuccessLoginServletComponent extends AbstractServlet {
     resp.setContentType("text/html");
     pageContent = pageContent.replace("${FULLNAME}", fullName);
 
-    String usersContent = "";
-    List<User> users = selectAllSavedUser();
-    for (User user : users) {
-      usersContent += "<tr>";
-      usersContent += "<td>" + user.resourceId + "</td>";
-      usersContent += "<td>" + user.providerName + "</td>";
-      usersContent += "<td>" + user.uniqueUserId + "</td>";
-      usersContent += "</tr>";
+    StringBuilder sb = new StringBuilder();
+    List<Tuple> users = selectAllSavedUser();
+    QOAuth2UserMapping oauth2UserMapping = QOAuth2UserMapping.oAuth2UserMapping;
+    for (Tuple user : users) {
+      sb.append("<tr>")
+          .append("<td>" + user.get(oauth2UserMapping.resourceId) + "</td>")
+          .append("<td>" + user.get(oauth2UserMapping.providerName) + "</td>")
+          .append("<td>" + user.get(oauth2UserMapping.providerUniqueUserId) + "</td>")
+          .append("</tr>");
     }
-    pageContent = pageContent.replace("${USERS}", usersContent);
+    pageContent = pageContent.replace("${USERS}", sb.toString());
 
     PrintWriter writer = resp.getWriter();
     writer.write(pageContent);
   }
 
-  private List<User> selectAllSavedUser() {
+  private List<Tuple> selectAllSavedUser() {
     return querydslSupport.execute((connection, configuration) -> {
       QOAuth2UserMapping oauth2UserMapping = QOAuth2UserMapping.oAuth2UserMapping;
       return new SQLQuery(connection, configuration)
           .from(oauth2UserMapping)
-          .list(Projections.fields(User.class, oauth2UserMapping.resourceId,
+          .list(oauth2UserMapping.resourceId,
               oauth2UserMapping.providerName,
-              oauth2UserMapping.providerUniqueUserId.as("uniqueUserId")));
+              oauth2UserMapping.providerUniqueUserId);
     });
   }
 

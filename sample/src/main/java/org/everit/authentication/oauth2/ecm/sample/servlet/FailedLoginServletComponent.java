@@ -33,7 +33,7 @@ import org.osgi.framework.BundleContext;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * Servlet that shows the index page.
+ * Servlet that shows the failed login page.
  */
 @Component
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
