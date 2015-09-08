@@ -33,8 +33,8 @@ import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
-import org.everit.authentication.oauth2.ecm.sample.internal.FacebookOAuth2UserIdResolverComponent;
-import org.everit.authentication.oauth2.ecm.sample.internal.GoogleOAuth2UserIdResolverComponent;
+import org.everit.authentication.oauth2.OAuth2UserIdResolver;
+import org.everit.authentication.oauth2.ecm.OAuth2UserIdResolverConstants;
 import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
 import org.everit.authentication.oauth2.ri.schema.qdsl.QOAuth2UserMapping;
 import org.everit.osgi.ecm.annotation.Activate;
@@ -63,9 +63,9 @@ import aQute.bnd.annotation.headers.ProvideCapability;
 @Service(value = { Servlet.class, SuccessLoginServletComponent.class })
 public class SuccessLoginServletComponent extends AbstractServlet {
 
-  private String facebookRequestUri;
+  private String facebookUserInformatiomRequestUri;
 
-  private String googleRequestUri;
+  private String googleUserInformationRequestUri;
 
   private OAuth2SessionAttributeNames oauth2SessionAttributeNames;
 
@@ -106,22 +106,22 @@ public class SuccessLoginServletComponent extends AbstractServlet {
       throws IOException {
     resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
     resp.setContentType("text/html");
-    pageContent = pageContent.replace("${FULLNAME}", fullName);
+    String respContent = pageContent.replace("${FULLNAME}", fullName);
 
     StringBuilder sb = new StringBuilder();
     List<Tuple> users = selectAllSavedUser();
     QOAuth2UserMapping oauth2UserMapping = QOAuth2UserMapping.oAuth2UserMapping;
     for (Tuple user : users) {
-      sb.append("<tr>")
+      sb = sb.append("<tr>")
           .append("<td>" + user.get(oauth2UserMapping.resourceId) + "</td>")
           .append("<td>" + user.get(oauth2UserMapping.providerName) + "</td>")
           .append("<td>" + user.get(oauth2UserMapping.providerUniqueUserId) + "</td>")
           .append("</tr>");
     }
-    pageContent = pageContent.replace("${USERS}", sb.toString());
+    respContent = respContent.replace("${USERS}", sb.toString());
 
     PrintWriter writer = resp.getWriter();
-    writer.write(pageContent);
+    writer.write(respContent);
   }
 
   private List<Tuple> selectAllSavedUser() {
@@ -141,9 +141,9 @@ public class SuccessLoginServletComponent extends AbstractServlet {
     String providerName = req.getParameter("providerName");
     String fullName = null;
     if ("facebook".equals(providerName)) {
-      fullName = getFullName(req, facebookRequestUri);
+      fullName = getFullName(req, facebookUserInformatiomRequestUri);
     } else if ("google".equals(providerName)) {
-      fullName = getFullName(req, googleRequestUri);
+      fullName = getFullName(req, googleUserInformationRequestUri);
     } else {
       resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
@@ -153,25 +153,27 @@ public class SuccessLoginServletComponent extends AbstractServlet {
   }
 
   /**
-   * TODO .
+   * Sets Facebook user information request URI.
    */
   @ServiceRef(defaultValue = "")
   public void setFacebookRequestUri(
-      final ServiceHolder<FacebookOAuth2UserIdResolverComponent> serviceHolder) {
-    ServiceReference<FacebookOAuth2UserIdResolverComponent> serviceReference =
+      final ServiceHolder<OAuth2UserIdResolver> serviceHolder) {
+    ServiceReference<OAuth2UserIdResolver> serviceReference =
         serviceHolder.getReference();
-    facebookRequestUri = serviceReference.getProperty("requestUri").toString();
+    facebookUserInformatiomRequestUri = serviceReference
+        .getProperty(OAuth2UserIdResolverConstants.PROP_USER_INFORMATION_REQUEST_URI).toString();
   }
 
   /**
-   * TODO .
+   * Sets Google user information request URI.
    */
   @ServiceRef(defaultValue = "")
   public void setGoogleRequestUri(
-      final ServiceHolder<GoogleOAuth2UserIdResolverComponent> serviceHolder) {
-    ServiceReference<GoogleOAuth2UserIdResolverComponent> serviceReference =
+      final ServiceHolder<OAuth2UserIdResolver> serviceHolder) {
+    ServiceReference<OAuth2UserIdResolver> serviceReference =
         serviceHolder.getReference();
-    googleRequestUri = serviceReference.getProperty("requestUri").toString();
+    googleUserInformationRequestUri = serviceReference
+        .getProperty(OAuth2UserIdResolverConstants.PROP_USER_INFORMATION_REQUEST_URI).toString();
   }
 
   @ServiceRef(defaultValue = "")
