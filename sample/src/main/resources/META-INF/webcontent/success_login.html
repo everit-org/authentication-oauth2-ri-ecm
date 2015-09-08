@@ -39,10 +39,14 @@
           <th>Unique user id</th>
         </tr>
       </thead>
-      <tbody>
-        ${USERS}
+      <tbody>${USERS}
       </tbody>
     </table>
+    <br />
+    <p>Logout only invalidate session.</p>
+    <form action="/logout">
+      <button id="logout">Logout</button>
+    </form>
   </div>
 </body>
 
