@@ -17,6 +17,7 @@ package org.everit.authentication.oauth2.ecm.internal;
 
 import java.util.Optional;
 
+import org.everit.authentication.oauth2.ecm.OAuth2ResourceIdResolverConstants;
 import org.everit.authentication.oauth2.ri.internal.OAuth2ResourceIdResolverImpl;
 import org.everit.osgi.ecm.annotation.Activate;
 import org.everit.osgi.ecm.annotation.Component;
@@ -36,7 +37,9 @@ import aQute.bnd.annotation.headers.ProvideCapability;
 /**
  * OAuth2 ResourceIdResolver component.
  */
-@Component(configurationPolicy = ConfigurationPolicy.REQUIRE)
+@Component(
+    componentId = OAuth2ResourceIdResolverConstants.SERVICE_FACTORYPID_OAUTH2_RESOURCE_ID_RESOLVER,
+    configurationPolicy = ConfigurationPolicy.REQUIRE)
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @Service
@@ -71,22 +74,26 @@ public class OAuth2ResourceIdResolverComponent implements ResourceIdResolver {
     return resourceIdResolver.getResourceId(uniqueIdentifier);
   }
 
-  @ServiceRef(defaultValue = "")
+  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_PROPERTY_MANAGER,
+      defaultValue = "")
   public void setPropertyManager(final PropertyManager propertyManager) {
     this.propertyManager = propertyManager;
   }
 
-  @ServiceRef(defaultValue = "")
+  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_QUERYDSL_SUPPORT,
+      defaultValue = "")
   public void setQuerydslSupport(final QuerydslSupport querydslSupport) {
     this.querydslSupport = querydslSupport;
   }
 
-  @ServiceRef(defaultValue = "")
+  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_RESOURCE_SERVICE,
+      defaultValue = "")
   public void setResourceService(final ResourceService resourceService) {
     this.resourceService = resourceService;
   }
 
-  @ServiceRef(defaultValue = "")
+  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_TRANSACTION_HELPER,
+      defaultValue = "")
   public void setTransactionHelper(final TransactionHelper transactionHelper) {
     this.transactionHelper = transactionHelper;
   }
