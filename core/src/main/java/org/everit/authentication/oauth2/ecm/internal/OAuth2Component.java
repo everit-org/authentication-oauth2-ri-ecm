@@ -20,13 +20,11 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.everit.authentication.oauth2.OAuth2UserIdResolver;
-import org.everit.authentication.oauth2.ecm.OAuth2ConfigurationConstants;
-import org.everit.authentication.oauth2.ecm.OAuth2ResourceIdResolverConstants;
-import org.everit.authentication.oauth2.ecm.OAuth2UserIdResolverConstants;
+import org.everit.authentication.oauth2.ecm.OAuth2Constants;
+import org.everit.authentication.oauth2.ri.AccessTokenResponse;
 import org.everit.authentication.oauth2.ri.OAuth2Communicator;
-import org.everit.authentication.oauth2.ri.dto.AccessTokenResponse;
-import org.everit.authentication.oauth2.ri.dto.OAuth2ConfigurationDTO;
-import org.everit.authentication.oauth2.ri.exception.OAuth2Exception;
+import org.everit.authentication.oauth2.ri.OAuth2ConfigurationDTO;
+import org.everit.authentication.oauth2.ri.OAuth2Services;
 import org.everit.authentication.oauth2.ri.internal.OAuth2CommunicatorImpl;
 import org.everit.authentication.oauth2.ri.internal.OAuth2ResourceIdResolverImpl;
 import org.everit.osgi.ecm.annotation.Activate;
@@ -46,17 +44,19 @@ import org.osgi.framework.Constants;
 
 import aQute.bnd.annotation.headers.ProvideCapability;
 
+/**
+ * Create and Provide OAuth2 services.
+ */
 @Component(configurationPolicy = ConfigurationPolicy.FACTORY)
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
-        defaultValue = OAuth2UserIdResolverConstants.DEFAULT_SERVICE_DESCRIPTION_GOOGLE)
+        defaultValue = OAuth2Constants.DEFAULT_SERVICE_DESCRIPTION)
 })
 @Service(value = { OAuth2Communicator.class, ResourceIdResolver.class, OAuth2UserIdResolver.class,
-    OAuth2Component.class })
-public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver,
-    OAuth2UserIdResolver {
+    OAuth2Services.class })
+public class OAuth2Component implements OAuth2Services {
 
   private String authorizationEndpoint;
 
@@ -91,6 +91,9 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver,
    */
   @Activate
   public void activate() {
+    resourceIdResolver = new OAuth2ResourceIdResolverImpl(
+        propertyManager, querydslSupport, resourceService, transactionHelper, providerName);
+
     OAuth2ConfigurationDTO oauth2Configuration = new OAuth2ConfigurationDTO()
         .authorizationEndpoint(authorizationEndpoint)
         .clientId(clientId)
@@ -99,19 +102,16 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver,
         .redirectEndpoint(redirectEndpoint)
         .scope(scope)
         .tokenEndpoint(tokenEndpoint);
-
-    resourceIdResolver = new OAuth2ResourceIdResolverImpl(
-        propertyManager, querydslSupport, resourceService, transactionHelper, providerName);
     oAuth2Communicator = new OAuth2CommunicatorImpl(oauth2Configuration);
   }
 
   @Override
-  public AccessTokenResponse getAccessToken(final HttpServletRequest req) throws OAuth2Exception {
+  public AccessTokenResponse getAccessToken(final HttpServletRequest req) {
     return oAuth2Communicator.getAccessToken(req);
   }
 
   @Override
-  public String getAuthorizationUriWithParams() throws OAuth2Exception {
+  public String getAuthorizationUriWithParams() {
     return oAuth2Communicator.getAuthorizationUriWithParams();
   }
 
@@ -122,79 +122,78 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver,
 
   @Override
   public String getUniqueUserId(final String tokenType, final String accessToken,
-      final Long accessTokenExpiresIn,
-      final String refreshToken, final String scope) {
+      final Long accessTokenExpiresIn, final String refreshToken, final String scope) {
     return oauth2UserIdResolverWrapped.getUniqueUserId(tokenType, accessToken, accessTokenExpiresIn,
         refreshToken, scope);
   }
 
-  @StringAttribute(attributeId = OAuth2ConfigurationConstants.PROP_AUTHORITZATION_ENDPOINT,
-      defaultValue = OAuth2ConfigurationConstants.DEFAULT_AUTHORIZATION_ENDPOINT)
+  @StringAttribute(attributeId = OAuth2Constants.PROP_AUTHORITZATION_ENDPOINT,
+      defaultValue = OAuth2Constants.DEFAULT_AUTHORIZATION_ENDPOINT)
   public void setAuthorizationEndpoint(final String authorizationEndpoint) {
     this.authorizationEndpoint = authorizationEndpoint;
   }
 
-  @StringAttribute(attributeId = OAuth2ConfigurationConstants.PROP_CLIENT_ID,
-      defaultValue = OAuth2ConfigurationConstants.DEFAULT_CLIENT_ID)
+  @StringAttribute(attributeId = OAuth2Constants.PROP_CLIENT_ID,
+      defaultValue = OAuth2Constants.DEFAULT_CLIENT_ID)
   public void setClientId(final String clientId) {
     this.clientId = clientId;
   }
 
-  @StringAttribute(attributeId = OAuth2ConfigurationConstants.PROP_CLIENT_SECRET,
-      defaultValue = OAuth2ConfigurationConstants.DEFAULT_CLIENT_SECRET)
+  @StringAttribute(attributeId = OAuth2Constants.PROP_CLIENT_SECRET,
+      defaultValue = OAuth2Constants.DEFAULT_CLIENT_SECRET)
   public void setClientSecret(final String clientSecret) {
     this.clientSecret = clientSecret;
   }
 
-  @ServiceRef(defaultValue = "")
+  @ServiceRef(attributeId = OAuth2Constants.SERVICE_OAUTH2_USER_ID_RESOLVER_WRAPPED,
+      defaultValue = "")
   public void setOauth2UserIdResolverWrapped(final OAuth2UserIdResolver oauth2UserIdResolver) {
-    // TODO .
     oauth2UserIdResolverWrapped = oauth2UserIdResolver;
   }
 
-  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_PROPERTY_MANAGER,
+  @ServiceRef(attributeId = OAuth2Constants.SERVICE_PROPERTY_MANAGER,
       defaultValue = "")
   public void setPropertyManager(final PropertyManager propertyManager) {
     this.propertyManager = propertyManager;
   }
 
-  @StringAttribute(attributeId = OAuth2ConfigurationConstants.PROP_PROVIDER_NAME,
-      defaultValue = OAuth2ConfigurationConstants.DEFAULT_PROVIDER_NAME)
+  @StringAttribute(attributeId = OAuth2Constants.PROP_PROVIDER_NAME,
+      defaultValue = OAuth2Constants.DEFAULT_PROVIDER_NAME)
   public void setProviderName(final String providerName) {
     this.providerName = providerName;
   }
 
-  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_QUERYDSL_SUPPORT,
+  @ServiceRef(attributeId = OAuth2Constants.SERVICE_QUERYDSL_SUPPORT,
       defaultValue = "")
   public void setQuerydslSupport(final QuerydslSupport querydslSupport) {
     this.querydslSupport = querydslSupport;
   }
 
-  @StringAttribute(attributeId = OAuth2ConfigurationConstants.PROP_REDIRECT_ENDPOINT,
-      defaultValue = OAuth2ConfigurationConstants.DEFAULT_REDIRECT_ENDPOINT)
+  @StringAttribute(attributeId = OAuth2Constants.PROP_REDIRECT_ENDPOINT,
+      defaultValue = OAuth2Constants.DEFAULT_REDIRECT_ENDPOINT)
   public void setRedirectEndpoint(final String redirectEndpoint) {
     this.redirectEndpoint = redirectEndpoint;
   }
 
-  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_RESOURCE_SERVICE,
+  @ServiceRef(attributeId = OAuth2Constants.SERVICE_RESOURCE_SERVICE,
       defaultValue = "")
   public void setResourceService(final ResourceService resourceService) {
     this.resourceService = resourceService;
   }
 
-  @StringAttribute(attributeId = OAuth2ConfigurationConstants.PROP_SCOPE,
-      defaultValue = OAuth2ConfigurationConstants.DEFAULT_SCOPE)
+  @StringAttribute(attributeId = OAuth2Constants.PROP_SCOPE,
+      defaultValue = OAuth2Constants.DEFAULT_SCOPE)
   public void setScope(final String scope) {
     this.scope = scope;
   }
 
-  @StringAttribute(attributeId = OAuth2ConfigurationConstants.PROP_TOKEN_ENDPOINT,
-      defaultValue = OAuth2ConfigurationConstants.DEFAULT_TOKEN_ENDPOINT)
+  @StringAttribute(attributeId = OAuth2Constants.PROP_TOKEN_ENDPOINT,
+      defaultValue = OAuth2Constants.DEFAULT_TOKEN_ENDPOINT)
   public void setTokenEndpoint(final String tokenEndpoint) {
     this.tokenEndpoint = tokenEndpoint;
   }
 
-  @ServiceRef(attributeId = OAuth2ResourceIdResolverConstants.PROP_TRANSACTION_HELPER,
+  @ServiceRef(attributeId = OAuth2Constants.SERVICE_TRANSACTION_HELPER,
       defaultValue = "")
   public void setTransactionHelper(final TransactionHelper transactionHelper) {
     this.transactionHelper = transactionHelper;

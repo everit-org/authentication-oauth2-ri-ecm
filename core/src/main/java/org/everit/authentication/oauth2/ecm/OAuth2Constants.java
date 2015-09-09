@@ -18,7 +18,7 @@ package org.everit.authentication.oauth2.ecm;
 /**
  * Constants of the OAuth2 Configuration component.
  */
-public final class OAuth2ConfigurationConstants {
+public final class OAuth2Constants {
 
   public static final String DEFAULT_AUTHORIZATION_ENDPOINT =
       "https://accounts.google.com/o/oauth2/auth";
@@ -33,6 +33,8 @@ public final class OAuth2ConfigurationConstants {
       "Type redirect endpoint which registered in OAuth2 server";
 
   public static final String DEFAULT_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
+
+  public static final String DEFAULT_SERVICE_DESCRIPTION = "Default OAuth2 Component";
 
   public static final String DEFAULT_TOKEN_ENDPOINT = "https://accounts.google.com/o/oauth2/token";
 
@@ -50,10 +52,18 @@ public final class OAuth2ConfigurationConstants {
 
   public static final String PROP_TOKEN_ENDPOINT = "token.endpoint";
 
-  public static final String SERVICE_FACTORYPID_OAUTH2_CONFIGURATION =
-      "org.everit.authentication.oauth2.ecm.internal.OAuth2Configuration";
+  public static final String SERVICE_OAUTH2_USER_ID_RESOLVER_WRAPPED =
+      "oauth2UserIdResolverWrapped.target";
 
-  private OAuth2ConfigurationConstants() {
+  public static final String SERVICE_PROPERTY_MANAGER = "propertyManager.target";
+
+  public static final String SERVICE_QUERYDSL_SUPPORT = "querydslSupport.target";
+
+  public static final String SERVICE_RESOURCE_SERVICE = "resourceService.target";
+
+  public static final String SERVICE_TRANSACTION_HELPER = "transactionHelper.target";
+
+  private OAuth2Constants() {
   }
 
 }

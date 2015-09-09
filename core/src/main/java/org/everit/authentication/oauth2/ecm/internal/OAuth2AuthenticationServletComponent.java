@@ -28,9 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.everit.authentication.oauth2.OAuth2UserIdResolver;
 import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationServletConstants;
+import org.everit.authentication.oauth2.ri.OAuth2AuthenticationServletParameter;
 import org.everit.authentication.oauth2.ri.OAuth2Communicator;
+import org.everit.authentication.oauth2.ri.OAuth2Services;
 import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
-import org.everit.authentication.oauth2.ri.dto.OAuth2AuthenticationServletParameter;
 import org.everit.authentication.oauth2.ri.internal.OAuth2AuthenticationServlet;
 import org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames;
 import org.everit.osgi.ecm.annotation.Activate;
@@ -68,6 +69,8 @@ import aQute.bnd.annotation.headers.ProvideCapability;
     OAuth2SessionAttributeNames.class })
 public class OAuth2AuthenticationServletComponent extends HttpServlet
     implements OAuth2SessionAttributeNames {
+
+  private static final String PARAM_PROVIDER_NAME = "providerName";
 
   private AuthenticationSessionAttributeNames authenticationSessionAttributeNames;
 
@@ -118,7 +121,7 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet
         .stream()
         .findFirst()
         .orElseGet(() -> {
-          throw new RuntimeException("");
+          throw new RuntimeException("Not find Authentication Servlet");
         });
   }
 
@@ -154,19 +157,17 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet
     if (oauth2AuthenticationServlets.size() == 1) {
       oauth2AuthenticationServlet = getFirstAuthenticationServlet();
     } else {
-      String providerName = req.getParameter("providerName");
+      String providerName = req.getParameter(PARAM_PROVIDER_NAME);
       oauth2AuthenticationServlet = oauth2AuthenticationServlets.get(providerName);
       if (oauth2AuthenticationServlet == null) {
-        // TODO .
-        resp.sendRedirect(failedUrl);
-        return;
+        throw new IllegalArgumentException("Not supported provider [" + providerName + "]");
       }
     }
     oauth2AuthenticationServlet.service(req, resp);
   }
 
   @ServiceRef(
-      attributeId = OAuth2AuthenticationServletConstants.PROP_AUTHENTICATION_SESSION_ATTRIBUTE_NAMES, // CS_DISABLE_LINE_LENGTH
+      attributeId = OAuth2AuthenticationServletConstants.SERVICE_AUTHENTICATION_SESSION_ATTRIBUTE_NAMES, // CS_DISABLE_LINE_LENGTH
       defaultValue = "")
   public void setAuthenticationSessionAttributeNames(
       final AuthenticationSessionAttributeNames authenticationSessionAttributeNames) {
@@ -185,15 +186,23 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet
     this.loginEndpointPath = loginEndpointPath;
   }
 
-  @ServiceRef(configurationType = ReferenceConfigurationType.CLAUSE, dynamic = true)
-  public void setOAuth2Components(final ServiceHolder<OAuth2Component>[] oauht2Components) {
+  /**
+   * Sets OAuth2 services.
+   */
+  @ServiceRef(attributeId = OAuth2AuthenticationServletConstants.SERVICE_OAUTH2_SERVICES_CLAUSE,
+      configurationType = ReferenceConfigurationType.CLAUSE, dynamic = true)
+  public void setOAuth2Services(final ServiceHolder<OAuth2Services>[] oauth2Services) {
+    if ((oauth2Services == null) || (oauth2Services.length == 0)) {
+      throw new ConfigurationException("OAuth2 services is empty.");
+    }
+
     providers.clear();
     oauth2Commuicators.clear();
     resourceIdResolvers.clear();
     oauth2UserIdResolvers.clear();
-    for (ServiceHolder<OAuth2Component> serviceHolder : oauht2Components) {
+    for (ServiceHolder<OAuth2Services> serviceHolder : oauth2Services) {
       String providerName = serviceHolder.getReferenceId();
-      OAuth2Component service = serviceHolder.getService();
+      OAuth2Services service = serviceHolder.getService();
       if (service == null) {
         throw new ConfigurationException("Not found service");
       }

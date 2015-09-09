@@ -33,29 +33,23 @@ public final class OAuth2AuthenticationServletConstants {
 
   public static final String DEFAULT_SUCCESS_URL = "/logged-in.html";
 
-  public static final String PROP_AUTHENTICATION_SESSION_ATTRIBUTE_NAMES =
-      "authenticationSessionAttributeNames.target";
-
   public static final String PROP_FAILED_URL = "failed.url";
 
-  public static final String PROP_LOG_SERVICE = "logService.target";
-
   public static final String PROP_LOGIN_ENDPOINT_PATH = "login.endpoint.path";
-
-  public static final String PROP_OAUTH2_CONFIGURATION = "oauth2Configuration.target";
-
-  public static final String PROP_OAUTH2_USER_ID_RESOLVER = "oauth2UserIdResolver.target";
 
   public static final String PROP_PROVIDER_NAME = "provider.name";
 
   public static final String PROP_REDIRECT_ENDPOINT_PATH = "redirect.endpoint.path";
 
-  public static final String PROP_RESOURCE_ID_RESOLVER = "resourceIdResolver.target";
-
   public static final String PROP_SUCCESS_URL = "success.url";
+
+  public static final String SERVICE_AUTHENTICATION_SESSION_ATTRIBUTE_NAMES =
+      "authenticationSessionAttributeNames.target";
 
   public static final String SERVICE_FACTORYPID_OAUTH2_AUTHENTICATION_SERVLET =
       "org.everit.authentication.oauth2.ecm.internal.OAuth2AuthenticationServlet";
+
+  public static final String SERVICE_OAUTH2_SERVICES_CLAUSE = "oAuth2Services.clause";
 
   private OAuth2AuthenticationServletConstants() {
   }

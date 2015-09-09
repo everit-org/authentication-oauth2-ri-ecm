@@ -20,25 +20,17 @@ package org.everit.authentication.oauth2.ecm;
  */
 public final class OAuth2UserIdResolverConstants {
 
-  public static final String DEFAULT_PROVIDER_NAME_FACEBOOK = "facebook";
+  public static final String DEFAULT_PROVIDER_NAME = "Type provider name.";
 
-  public static final String DEFAULT_PROVIDER_NAME_GOOGLE = "google";
-
-  public static final String DEFAULT_SERVICE_DESCRIPTION_FACEBOOK =
-      "Default Facebook OAuth2 User Id Resolver";
-
-  public static final String DEFAULT_SERVICE_DESCRIPTION_GOOGLE =
-      "Default Google OAuth2 User Id Resolver";
+  public static final String DEFAULT_SERVICE_DESCRIPTION =
+      "Default OAuth2 User Id Resolver. Tested in Google and Facebook.";
 
   public static final String PROP_PROVIDER_NAME = "provider.name";
 
   public static final String PROP_USER_INFORMATION_REQUEST_URI = "user.information.request.uri";
 
   public static final String SERVICE_FACTORYPID_FACEBOOK_OAUTH2_USER_ID_RESOLVER =
-      "org.everit.authentication.oauth2.ecm.internal.FacebookOAuth2UserIdResolver";
-
-  public static final String SERVICE_FACTORYPID_GOOGLE_OAUTH2_USER_ID_RESOLVER =
-      "org.everit.authentication.oauth2.ecm.internal.GoogleOAuth2UserIdResolver";
+      "org.everit.authentication.oauth2.ecm.internal.DefaultOAuth2UserIdResolver";
 
   private OAuth2UserIdResolverConstants() {
   }
