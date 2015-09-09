@@ -17,7 +17,7 @@ package org.everit.authentication.oauth2.ecm.internal;
 
 import org.everit.authentication.oauth2.OAuth2UserIdResolver;
 import org.everit.authentication.oauth2.ecm.OAuth2UserIdResolverConstants;
-import org.everit.authentication.oauth2.ri.internal.GoogleOAuth2UserIdResolverImpl;
+import org.everit.authentication.oauth2.ri.internal.DefaultOAuth2UserIdResolverImpl;
 import org.everit.osgi.ecm.annotation.Activate;
 import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
@@ -30,21 +30,21 @@ import org.osgi.framework.Constants;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * Google OAuth2 User Id Resolver Component.
+ * Facebook OAuth2 User Id Resolver Component.
  */
 @Component(
-    componentId = OAuth2UserIdResolverConstants.SERVICE_FACTORYPID_GOOGLE_OAUTH2_USER_ID_RESOLVER,
-    configurationPolicy = ConfigurationPolicy.REQUIRE)
+    componentId = OAuth2UserIdResolverConstants.SERVICE_FACTORYPID_FACEBOOK_OAUTH2_USER_ID_RESOLVER,
+    configurationPolicy = ConfigurationPolicy.FACTORY)
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
-        defaultValue = OAuth2UserIdResolverConstants.DEFAULT_SERVICE_DESCRIPTION_GOOGLE),
+        defaultValue = OAuth2UserIdResolverConstants.DEFAULT_SERVICE_DESCRIPTION),
     @StringAttribute(attributeId = OAuth2UserIdResolverConstants.PROP_PROVIDER_NAME,
-        defaultValue = OAuth2UserIdResolverConstants.DEFAULT_PROVIDER_NAME_GOOGLE)
+        defaultValue = OAuth2UserIdResolverConstants.DEFAULT_PROVIDER_NAME)
 })
 @Service
-public class GoogleOAuth2UserIdResolverComponent implements OAuth2UserIdResolver {
+public class DefaultOAuth2UserIdResolverComponent implements OAuth2UserIdResolver {
 
   private OAuth2UserIdResolver oauth2UserIdResolver;
 
@@ -55,7 +55,7 @@ public class GoogleOAuth2UserIdResolverComponent implements OAuth2UserIdResolver
    */
   @Activate
   public void activate() {
-    oauth2UserIdResolver = new GoogleOAuth2UserIdResolverImpl(userInformationRequestURI);
+    oauth2UserIdResolver = new DefaultOAuth2UserIdResolverImpl(userInformationRequestURI);
   }
 
   @Override
@@ -66,7 +66,7 @@ public class GoogleOAuth2UserIdResolverComponent implements OAuth2UserIdResolver
   }
 
   @StringAttribute(attributeId = OAuth2UserIdResolverConstants.PROP_USER_INFORMATION_REQUEST_URI,
-      defaultValue = "https://www.googleapis.com/userinfo/v2/me")
+      defaultValue = "")
   public void setUserInformationRequestURI(final String userInformationRequestURI) {
     this.userInformationRequestURI = userInformationRequestURI;
   }
