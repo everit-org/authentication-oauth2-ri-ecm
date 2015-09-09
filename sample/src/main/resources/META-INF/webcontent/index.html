@@ -35,12 +35,14 @@
     </p>
   </div>
   <br />
-  <form action="/google-auth-oauth2">
+  <form action="/oauth2-auth" method="get">
+    <input type="hidden" name="providerName" value="google" />
     <button id="loginWithGoogle">Login with Google</button>
   </form>
   <br />
   <br />
-  <form action="/fb-auth-oauth2">
+  <form action="/oauth2-auth?providerName=facebook">
+    <input type="hidden" name="providerName" value="facebook" />
     <button id="loginWithFacebook">Login with facebook</button>
   </form>
 </body>
