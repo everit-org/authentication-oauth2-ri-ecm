@@ -16,9 +16,8 @@
 package org.everit.authentication.oauth2.ecm.sample.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -34,7 +33,7 @@ import org.osgi.framework.BundleContext;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * Servlet that shows the index page.
+ * Servlet that shows the failed login page.
  */
 @Component
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
@@ -59,9 +58,8 @@ public class FailedLoginServletComponent extends AbstractServlet {
     resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
     resp.setContentType("text/html");
 
-    Map<String, Object> vars = new HashMap<>();
-
-    pageTemplate.render(resp.getWriter(), vars, null);
+    PrintWriter writer = resp.getWriter();
+    writer.write(pageContent);
   }
 
 }

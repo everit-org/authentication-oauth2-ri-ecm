@@ -119,7 +119,7 @@
       <version>2.4.1</version>
       <scope>provided</scope>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>org.everit.osgi</groupId>
       <artifactId>org.everit.osgi.ecm.extender.api</artifactId>
       <version>1.0.0</version>
@@ -127,6 +127,11 @@
     <dependency>
       <groupId>org.everit.osgi</groupId>
       <artifactId>org.everit.osgi.ecm.annotation</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.osgi</groupId>
+      <artifactId>org.everit.osgi.ecm.component.api</artifactId>
       <version>1.0.0</version>
     </dependency>
   </dependencies>

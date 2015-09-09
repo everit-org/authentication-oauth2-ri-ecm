@@ -20,60 +20,24 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.everit.expression.ParserConfiguration;
-import org.everit.expression.mvel.MvelExpressionCompiler;
-import org.everit.templating.CompiledTemplate;
-import org.everit.templating.TemplateCompiler;
-import org.everit.templating.html.HTMLTemplateCompiler;
-import org.everit.templating.text.TextTemplateCompiler;
 import org.everit.web.servlet.HttpServlet;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
 
+/**
+ * Abstract Servlet for read pages.
+ */
 public abstract class AbstractServlet extends HttpServlet {
 
-  protected ClassLoader classLoader;
-
-  protected CompiledTemplate pageTemplate;
+  protected String pageContent;
 
   /**
-   * Compiles the layout template and sets the classLoader member variable.
+   * Read page content variable.
    */
   public void activate(final BundleContext bundleContext) {
-    classLoader = bundleContext.getBundle().adapt(BundleWiring.class).getClassLoader();
-    pageTemplate = compileTemplate("META-INF/webcontent/" + getPageId() + ".html");
-  }
-
-  /**
-   * Compiles a template.
-   *
-   * @param templateName
-   *          The url of the template resource.
-   * @param classLoader
-   *          The classLoader that is used to find the template resource.
-   * @return The compiled template.
-   */
-  private CompiledTemplate compileTemplate(final String templateName) {
-    MvelExpressionCompiler mvelExpressionCompiler = new MvelExpressionCompiler();
-
-    Map<String, TemplateCompiler> inlineCompilers = new HashMap<>();
-    inlineCompilers.put("text", new TextTemplateCompiler(mvelExpressionCompiler));
-
-    HTMLTemplateCompiler htmlTemplateCompiler = new HTMLTemplateCompiler(mvelExpressionCompiler,
-        inlineCompilers);
-    ParserConfiguration parserConfiguration = new ParserConfiguration(classLoader);
-
-    String template = readResourceContent(templateName);
-
-    if (template == null) {
-      return null;
-    }
-
-    CompiledTemplate result = htmlTemplateCompiler.compile(template, parserConfiguration);
-    return result;
+    ClassLoader classLoader = bundleContext.getBundle().adapt(BundleWiring.class).getClassLoader();
+    pageContent = readResourceContent(classLoader, "META-INF/webcontent/" + getPageId() + ".html");
   }
 
   protected abstract String getPageId();
@@ -81,13 +45,13 @@ public abstract class AbstractServlet extends HttpServlet {
   /**
    * Reads the content of a resource into a String with UTF8 character encoding.
    *
-   * @param resource
-   *          The name of the resource.
    * @param classLoader
    *          The ClassLoader that sees the resource.
+   * @param resource
+   *          The name of the resource.
    * @return The content of the file.
    */
-  private String readResourceContent(final String resource) {
+  private String readResourceContent(final ClassLoader classLoader, final String resource) {
     URL resourceURL = classLoader.getResource(resource);
 
     if (resourceURL == null) {
