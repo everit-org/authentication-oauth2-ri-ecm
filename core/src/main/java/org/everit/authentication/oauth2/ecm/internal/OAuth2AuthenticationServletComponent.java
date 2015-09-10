@@ -126,28 +126,28 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet
   }
 
   @Override
-  public String oauth2AccessToken() {
-    return getFirstAuthenticationServlet().oauth2AccessToken();
+  public String accessToken() {
+    return getFirstAuthenticationServlet().accessToken();
   }
 
   @Override
-  public String oauth2AccessTokenExpiresIn() {
-    return getFirstAuthenticationServlet().oauth2AccessTokenExpiresIn();
+  public String accessTokenExpiresIn() {
+    return getFirstAuthenticationServlet().accessTokenExpiresIn();
   }
 
   @Override
-  public String oauth2RefreshToken() {
-    return getFirstAuthenticationServlet().oauth2RefreshToken();
+  public String refreshToken() {
+    return getFirstAuthenticationServlet().refreshToken();
   }
 
   @Override
-  public String oauth2Scope() {
-    return getFirstAuthenticationServlet().oauth2Scope();
+  public String scope() {
+    return getFirstAuthenticationServlet().scope();
   }
 
   @Override
-  public String oauth2TokenType() {
-    return getFirstAuthenticationServlet().oauth2TokenType();
+  public String tokenType() {
+    return getFirstAuthenticationServlet().tokenType();
   }
 
   @Override

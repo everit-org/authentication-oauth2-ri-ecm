@@ -80,7 +80,7 @@ public class SuccessLoginServletComponent extends AbstractServlet {
   private String getFullName(final HttpServletRequest req, final String requestUri) {
     HttpSession session = req.getSession();
     String accessToken =
-        session.getAttribute(oauth2SessionAttributeNames.oauth2AccessToken()).toString();
+        session.getAttribute(oauth2SessionAttributeNames.accessToken()).toString();
     OAuthResourceResponse resourceResponse;
     try {
       OAuthClientRequest resourceRequest =
