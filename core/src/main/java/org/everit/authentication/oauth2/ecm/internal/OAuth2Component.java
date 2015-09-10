@@ -106,13 +106,13 @@ public class OAuth2Component implements OAuth2Services {
   }
 
   @Override
-  public AccessTokenResponse getAccessToken(final HttpServletRequest req) {
-    return oAuth2Communicator.getAccessToken(req);
+  public String buildAuthorizationUri() {
+    return oAuth2Communicator.buildAuthorizationUri();
   }
 
   @Override
-  public String getAuthorizationUriWithParams() {
-    return oAuth2Communicator.getAuthorizationUriWithParams();
+  public AccessTokenResponse getAccessToken(final HttpServletRequest req) {
+    return oAuth2Communicator.getAccessToken(req);
   }
 
   @Override
