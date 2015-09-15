@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.everit.authentication.oauth2.AccessTokenResponse;
 import org.everit.authentication.oauth2.OAuth2Communicator;
 import org.everit.authentication.oauth2.ecm.OAuth2Constants;
-import org.everit.authentication.oauth2.ri.OAuth2ConfigurationParam;
 import org.everit.authentication.oauth2.ri.OAuth2OltuCommunicatorImpl;
 import org.everit.authentication.oauth2.ri.OAuth2ResourceIdResolverImpl;
 import org.everit.osgi.ecm.annotation.Activate;
@@ -92,11 +91,9 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
     resourceIdResolver = new OAuth2ResourceIdResolverImpl(
         propertyManager, querydslSupport, resourceService, transactionHelper, providerName);
 
-    OAuth2ConfigurationParam auth2ConfigurationParam = new OAuth2ConfigurationParam(
-        providerName, clientId, clientSecret, authorizationEndpoint, tokenEndpoint, scope);
-
     oAuth2Communicator =
-        new OAuth2OltuCommunicatorImpl(auth2ConfigurationParam, userInformationRequestURI);
+        new OAuth2OltuCommunicatorImpl(providerName, clientId, clientSecret, authorizationEndpoint,
+            tokenEndpoint, scope, userInformationRequestURI);
   }
 
   @Override
@@ -106,7 +103,7 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
 
   @Override
   public String getProviderName() {
-    return providerName;
+    return oAuth2Communicator.getProviderName();
   }
 
   @Override
