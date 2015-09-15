@@ -16,34 +16,24 @@
 package org.everit.authentication.oauth2.ecm.internal;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.everit.authentication.oauth2.OAuth2UserIdResolver;
+import org.everit.authentication.oauth2.OAuth2Communicator;
+import org.everit.authentication.oauth2.OAuth2SessionAttributeNames;
 import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationServletConstants;
-import org.everit.authentication.oauth2.ri.OAuth2AuthenticationServletParameter;
-import org.everit.authentication.oauth2.ri.OAuth2Communicator;
-import org.everit.authentication.oauth2.ri.OAuth2Services;
-import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
-import org.everit.authentication.oauth2.ri.internal.OAuth2AuthenticationServlet;
+import org.everit.authentication.oauth2.ri.OAuth2AuthenticationServlet;
 import org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames;
 import org.everit.osgi.ecm.annotation.Activate;
 import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
-import org.everit.osgi.ecm.annotation.ReferenceConfigurationType;
 import org.everit.osgi.ecm.annotation.Service;
 import org.everit.osgi.ecm.annotation.ServiceRef;
 import org.everit.osgi.ecm.annotation.attribute.StringAttribute;
 import org.everit.osgi.ecm.annotation.attribute.StringAttributes;
-import org.everit.osgi.ecm.component.ConfigurationException;
-import org.everit.osgi.ecm.component.ServiceHolder;
 import org.everit.osgi.ecm.extender.ECMExtenderConstants;
 import org.everit.osgi.resource.resolver.ResourceIdResolver;
 import org.everit.web.servlet.HttpServlet;
@@ -62,33 +52,24 @@ import aQute.bnd.annotation.headers.ProvideCapability;
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
         defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_SERVICE_DESCRIPTION),
-    @StringAttribute(attributeId = OAuth2AuthenticationServletConstants.PROP_PROVIDER_NAME,
-        defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_PROVIDER_NAME)
-})
-@Service(value = { Servlet.class, OAuth2AuthenticationServletComponent.class,
-    OAuth2SessionAttributeNames.class })
-public class OAuth2AuthenticationServletComponent extends HttpServlet
-    implements OAuth2SessionAttributeNames {
-
-  private static final String PARAM_PROVIDER_NAME = "providerName";
+    @StringAttribute(attributeId = OAuth2AuthenticationServletConstants.PROP_PROVIDER_NAME) })
+@Service(Servlet.class)
+public class OAuth2AuthenticationServletComponent
+    extends HttpServlet {
 
   private AuthenticationSessionAttributeNames authenticationSessionAttributeNames;
 
   private String failedUrl;
 
-  private String loginEndpointPath;
+  private OAuth2AuthenticationServlet oauth2AuthenticationServlet;
 
-  private Map<String, OAuth2AuthenticationServlet> oauth2AuthenticationServlets = new HashMap<>();
+  private OAuth2Communicator oauth2Communicator;
 
-  private Map<String, OAuth2Communicator> oauth2Commuicators = new HashMap<>();
+  private OAuth2SessionAttributeNames oauth2SessionAttributeNames;
 
-  private Map<String, OAuth2UserIdResolver> oauth2UserIdResolvers = new HashMap<>();
+  private String processRequestTokenPathInfo;
 
-  private List<String> providers = new ArrayList<>();
-
-  private String redirectEndpointPath;
-
-  private Map<String, ResourceIdResolver> resourceIdResolvers = new HashMap<>();
+  private ResourceIdResolver resourceIdResolver;
 
   private String successUrl;
 
@@ -97,72 +78,17 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet
    */
   @Activate
   public void activate() {
-    oauth2AuthenticationServlets.clear();
-    providers.forEach((providerName) -> {
-      OAuth2AuthenticationServletParameter oauth2AuthenticationServletParameter =
-          new OAuth2AuthenticationServletParameter()
-              .authenticationSessionAttributeNames(authenticationSessionAttributeNames)
-              .failedUrl(failedUrl)
-              .loginEndpointPath(loginEndpointPath)
-              .oauth2Communicator(oauth2Commuicators.get(providerName))
-              .oauth2UserIdResolver(oauth2UserIdResolvers.get(providerName))
-              .redirectEndpointPath(redirectEndpointPath)
-              .resourceIdResolver(resourceIdResolvers.get(providerName))
-              .successUrl(successUrl);
-
-      OAuth2AuthenticationServlet oauth2AuthenticationServlet =
-          new OAuth2AuthenticationServlet(oauth2AuthenticationServletParameter);
-      oauth2AuthenticationServlets.put(providerName, oauth2AuthenticationServlet);
-    });
-  }
-
-  private OAuth2AuthenticationServlet getFirstAuthenticationServlet() {
-    return oauth2AuthenticationServlets.values()
-        .stream()
-        .findFirst()
-        .orElseGet(() -> {
-          throw new RuntimeException("Not find Authentication Servlet");
-        });
-  }
-
-  @Override
-  public String accessToken() {
-    return getFirstAuthenticationServlet().accessToken();
-  }
-
-  @Override
-  public String accessTokenExpiresIn() {
-    return getFirstAuthenticationServlet().accessTokenExpiresIn();
-  }
-
-  @Override
-  public String refreshToken() {
-    return getFirstAuthenticationServlet().refreshToken();
-  }
-
-  @Override
-  public String scope() {
-    return getFirstAuthenticationServlet().scope();
-  }
-
-  @Override
-  public String tokenType() {
-    return getFirstAuthenticationServlet().tokenType();
+    oauth2AuthenticationServlet =
+        new OAuth2AuthenticationServlet(successUrl, failedUrl, processRequestTokenPathInfo,
+            oauth2Communicator,
+            resourceIdResolver,
+            authenticationSessionAttributeNames,
+            oauth2SessionAttributeNames);
   }
 
   @Override
   protected void service(final HttpServletRequest req, final HttpServletResponse resp)
       throws ServletException, IOException {
-    OAuth2AuthenticationServlet oauth2AuthenticationServlet;
-    if (oauth2AuthenticationServlets.size() == 1) {
-      oauth2AuthenticationServlet = getFirstAuthenticationServlet();
-    } else {
-      String providerName = req.getParameter(PARAM_PROVIDER_NAME);
-      oauth2AuthenticationServlet = oauth2AuthenticationServlets.get(providerName);
-      if (oauth2AuthenticationServlet == null) {
-        throw new IllegalArgumentException("Not supported provider [" + providerName + "]");
-      }
-    }
     oauth2AuthenticationServlet.service(req, resp);
   }
 
@@ -174,55 +100,47 @@ public class OAuth2AuthenticationServletComponent extends HttpServlet
     this.authenticationSessionAttributeNames = authenticationSessionAttributeNames;
   }
 
-  @StringAttribute(attributeId = OAuth2AuthenticationServletConstants.PROP_FAILED_URL,
+  @StringAttribute(
+      attributeId = OAuth2AuthenticationServletConstants.PROP_SUCCESS_URL,
+      defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_SUCCESS_URL)
+  public void setAuthenticationSuccessUrl(final String successUrl) {
+    this.successUrl = successUrl;
+  }
+
+  @StringAttribute(
+      attributeId = OAuth2AuthenticationServletConstants.PROP_FAILED_URL,
       defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_FAILED_URL)
   public void setFailedUrl(final String failedUrl) {
     this.failedUrl = failedUrl;
   }
 
-  @StringAttribute(attributeId = OAuth2AuthenticationServletConstants.PROP_LOGIN_ENDPOINT_PATH,
-      defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_LOGIN_ENDPOINT_PATH)
-  public void setLoginEndpointPath(final String loginEndpointPath) {
-    this.loginEndpointPath = loginEndpointPath;
+  @ServiceRef(
+      attributeId = OAuth2AuthenticationServletConstants.SERVICE_OAUTH2_COMMUNICATOR,
+      defaultValue = "")
+  public void setOauth2Communicator(final OAuth2Communicator oauth2Communicator) {
+    this.oauth2Communicator = oauth2Communicator;
   }
 
-  /**
-   * Sets OAuth2 services.
-   */
-  @ServiceRef(attributeId = OAuth2AuthenticationServletConstants.SERVICE_OAUTH2_SERVICES_CLAUSE,
-      configurationType = ReferenceConfigurationType.CLAUSE, dynamic = true)
-  public void setOAuth2Services(final ServiceHolder<OAuth2Services>[] oauth2Services) {
-    if ((oauth2Services == null) || (oauth2Services.length == 0)) {
-      throw new ConfigurationException("OAuth2 services is empty.");
-    }
-
-    providers.clear();
-    oauth2Commuicators.clear();
-    resourceIdResolvers.clear();
-    oauth2UserIdResolvers.clear();
-    for (ServiceHolder<OAuth2Services> serviceHolder : oauth2Services) {
-      String providerName = serviceHolder.getReferenceId();
-      OAuth2Services service = serviceHolder.getService();
-      if (service == null) {
-        throw new ConfigurationException("Not found service");
-      }
-      oauth2Commuicators.put(providerName, service);
-      resourceIdResolvers.put(providerName, service);
-      oauth2UserIdResolvers.put(providerName, service);
-      providers.add(providerName);
-    }
+  @ServiceRef(
+      attributeId = OAuth2AuthenticationServletConstants.SERVICE_OAUTH2_SESSION_ATTRIBUTE_NAMES,
+      defaultValue = "")
+  public void setOauth2SessionAttributeNames(
+      final OAuth2SessionAttributeNames oauth2SessionAttributeNames) {
+    this.oauth2SessionAttributeNames = oauth2SessionAttributeNames;
   }
 
-  @StringAttribute(attributeId = OAuth2AuthenticationServletConstants.PROP_REDIRECT_ENDPOINT_PATH,
-      defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_REDIRECT_ENDPOINT_PATH)
-  public void setRedirectEndpointPath(final String redirectEndpointPath) {
-    this.redirectEndpointPath = redirectEndpointPath;
+  @StringAttribute(
+      attributeId = OAuth2AuthenticationServletConstants.PROP_PROCESS_REQUEST_TOKEN_PATH_INFO,
+      defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_PROCESS_REQUEST_TOKEN_PATH_INFO)
+  public void setProcessRequestTokenPathInfo(final String processRequestTokenPathInfo) {
+    this.processRequestTokenPathInfo = processRequestTokenPathInfo;
   }
 
-  @StringAttribute(attributeId = OAuth2AuthenticationServletConstants.PROP_SUCCESS_URL,
-      defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_SUCCESS_URL)
-  public void setSuccessUrl(final String successUrl) {
-    this.successUrl = successUrl;
+  @ServiceRef(
+      attributeId = OAuth2AuthenticationServletConstants.SERVICE_RESOURCE_ID_RESOLVER,
+      defaultValue = "")
+  public void setResourceIdResolver(final ResourceIdResolver resourceIdResolver) {
+    this.resourceIdResolver = resourceIdResolver;
   }
 
 }

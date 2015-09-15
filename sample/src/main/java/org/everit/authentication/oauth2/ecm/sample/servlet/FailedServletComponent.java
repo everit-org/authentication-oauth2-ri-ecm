@@ -38,8 +38,8 @@ import aQute.bnd.annotation.headers.ProvideCapability;
 @Component
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
-@Service(value = { Servlet.class, FailedLoginServletComponent.class })
-public class FailedLoginServletComponent extends AbstractServlet {
+@Service(value = { Servlet.class, FailedServletComponent.class })
+public class FailedServletComponent extends AbstractServlet {
 
   @Activate
   @Override
@@ -49,7 +49,7 @@ public class FailedLoginServletComponent extends AbstractServlet {
 
   @Override
   protected String getPageId() {
-    return "failed_login";
+    return "failed";
   }
 
   @Override

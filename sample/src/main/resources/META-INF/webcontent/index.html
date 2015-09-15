@@ -19,31 +19,27 @@
 <html>
 
 <head>
-<title>Everit Authentication OAuth2 Sample - Index</title>
-<meta name="author" content="" />
+<title>Everit Authentication OAuth2 Sample</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
   <div>
     <p>
-      <b>IMPORTANT</b>: Before try to login must be set some configuration in register client in <a
-        href="https://developers.google.com/identity/sign-in/web/devconsole-project">Google</a>
-      and/or <a href="https://developers.facebook.com/docs/apps/register">Facebook</a> and configure
-      components in <a href="https://localhost:8443/system/console/configMgr">https://localhost:8443/system/console/configMgr</a>.
-      Configure the correct client id, client secret in OAuth2Configuration components.
+      <b>IMPORTANT:</b> Configure the OAuth2 components on the <a href="https://localhost:4848/system/console/configMgr">Web
+        Console</a> with "Client ID" and "Client Secret" provided by <a
+        href="https://developers.google.com/identity/sign-in/web/devconsole-project">Google</a> and/or <a
+        href="https://developers.facebook.com/docs/apps/register">Facebook</a> before try this sample.
     </p>
   </div>
   <br />
-  <form action="/oauth2-auth" method="get">
-    <input type="hidden" name="providerName" value="google" />
-    <button id="loginWithGoogle">Login with Google</button>
+  <form action="/sign-in-with-google" method="get">
+    <button>Sign in with Google</button>
   </form>
   <br />
   <br />
-  <form action="/oauth2-auth?providerName=facebook">
-    <input type="hidden" name="providerName" value="facebook" />
-    <button id="loginWithFacebook">Login with facebook</button>
+  <form action="/sign-in-with-facebook">
+    <button>Sign in with Facebook</button>
   </form>
 </body>
 

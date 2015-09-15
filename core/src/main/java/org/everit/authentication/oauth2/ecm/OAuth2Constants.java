@@ -20,48 +20,37 @@ package org.everit.authentication.oauth2.ecm;
  */
 public final class OAuth2Constants {
 
-  public static final String DEFAULT_AUTHORIZATION_ENDPOINT =
-      "https://accounts.google.com/o/oauth2/auth";
-
-  public static final String DEFAULT_CLIENT_ID = "Copy from OAuth2 server.";
-
-  public static final String DEFAULT_CLIENT_SECRET = "Copy form OAuth2 server.";
-
-  public static final String DEFAULT_PROVIDER_NAME = "google";
-
-  public static final String DEFAULT_REDIRECT_ENDPOINT =
-      "Type redirect endpoint which registered in OAuth2 server";
-
-  public static final String DEFAULT_SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
-
   public static final String DEFAULT_SERVICE_DESCRIPTION = "Default OAuth2 Component";
 
-  public static final String DEFAULT_TOKEN_ENDPOINT = "https://accounts.google.com/o/oauth2/token";
+  public static final String PROP_AUTHORITZATION_ENDPOINT = "oauth2.authorization.endpoint";
 
-  public static final String PROP_AUTHORITZATION_ENDPOINT = "authorization.endpoint";
+  public static final String PROP_CLIENT_ID = "oauth2.client.id";
 
-  public static final String PROP_CLIENT_ID = "client.id";
+  public static final String PROP_CLIENT_SECRET = "oauth2.client.secret";
 
-  public static final String PROP_CLIENT_SECRET = "client.secret";
+  public static final String PROP_PROVIDER_NAME = "oauth2.provider.name";
 
-  public static final String PROP_PROVIDER_NAME = "provider.name";
+  public static final String PROP_SCOPE = "oauth2.scope";
 
-  public static final String PROP_REDIRECT_ENDPOINT = "redirect.endpoint";
+  public static final String PROP_TOKEN_ENDPOINT = "oauth2.token.endpoint";
 
-  public static final String PROP_SCOPE = "scope";
+  public static final String PROP_USER_INFORMATION_REQUEST_URI =
+      "oauth2.user.information.request.uri";
 
-  public static final String PROP_TOKEN_ENDPOINT = "token.endpoint";
+  public static final String SERVICE_FACTORYPID_OAUTH2 =
+      "org.everit.authentication.oauth2.ecm.OAuth2";
 
-  public static final String SERVICE_OAUTH2_USER_ID_RESOLVER_WRAPPED =
-      "oauth2UserIdResolverWrapped.target";
+  public static final String SERVICE_PROPERTY_MANAGER =
+      "propertyManager.target";
 
-  public static final String SERVICE_PROPERTY_MANAGER = "propertyManager.target";
+  public static final String SERVICE_QUERYDSL_SUPPORT =
+      "querydslSupport.target";
 
-  public static final String SERVICE_QUERYDSL_SUPPORT = "querydslSupport.target";
+  public static final String SERVICE_RESOURCE_SERVICE =
+      "resourceService.target";
 
-  public static final String SERVICE_RESOURCE_SERVICE = "resourceService.target";
-
-  public static final String SERVICE_TRANSACTION_HELPER = "transactionHelper.target";
+  public static final String SERVICE_TRANSACTION_HELPER =
+      "transactionHelper.target";
 
   private OAuth2Constants() {
   }

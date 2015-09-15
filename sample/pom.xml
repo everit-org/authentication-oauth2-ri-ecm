@@ -80,11 +80,6 @@
             </Import-Package>
             <Export-Package>
             </Export-Package>
-            <EOSGi-TestNum>0</EOSGi-TestNum>
-            <Require-Capability>
-            </Require-Capability>
-            <Provide-Capability>
-            </Provide-Capability>
           </instructions>
         </configuration>
       </plugin>
@@ -92,21 +87,7 @@
         <groupId>org.everit.osgi.dev</groupId>
         <artifactId>eosgi-maven-plugin</artifactId>
         <version>3.2.0</version>
-        <executions>
-          <execution>
-            <id>integration-test</id>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>integration-test</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
-          <jacoco>
-            <includes>org.everit.web.partialresponse.*</includes>
-            <excludes>org.everit.web.partialresponse.tests.*</excludes>
-            <output>$${ if (System.getenv("EOSGI_STOP_AFTER_TESTS").equals("true")) "file"; else "tcpserver"; }</output>
-          </jacoco>
           <environments>
             <environment>
               <id>equinoxtest</id>
@@ -121,9 +102,6 @@
               <vmOptions>
                 <vmOption>-Xdebug</vmOption>
                 <vmOption>-Xrunjdwp:server=y,transport=dt_socket,address=9009,suspend=n</vmOption>
-                <vmOption>-Duser.country=GB</vmOption>
-                <vmOption>-Duser.language=en</vmOption>
-                <vmOption>-Duser.timezone=GMT</vmOption>
               </vmOptions>
             </environment>
           </environments>
@@ -165,11 +143,6 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.everit.osgi.dev</groupId>
-      <artifactId>org.everit.osgi.dev.testrunner.junit4</artifactId>
-      <version>3.0.4</version>
-    </dependency>
     <dependency>
       <groupId>org.everit.osgi.dev</groupId>
       <artifactId>org.everit.osgi.dev.richconsole</artifactId>

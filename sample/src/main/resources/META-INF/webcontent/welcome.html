@@ -19,34 +19,31 @@
 <html>
 
 <head>
-<title>Everit Authentication OAuth2 Sample - Success Login</title>
-<meta name="author" content="" />
+<title>Everit Authentication OAuth2 Sample</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 
 <body>
   <div>
-    <p>Success login</p>
+    <p>Welcome ${FULL_NAME}! You were authenticated via [${PROVIDER_NAME}].</p>
     <br />
-    <p>Full name in OAuth2 server: ${FULLNAME}</p>
-    <br />
-    <p>Saved users with OAuth2 Resource ID Resolver:</p>
+    <p>Authenticated Resource ID: ${AUTHENTICATED_RESOURCE_ID}</p>
+    <p>Resource mappings:</p>
     <table>
       <thead>
         <tr>
-          <th>Resource id</th>
+          <th>Resource ID</th>
           <th>Provider name</th>
-          <th>Unique user id</th>
+          <th>Unique user ID</th>
         </tr>
       </thead>
-      <tbody>${USERS}
-      </tbody>
+      <tbody>${RESOURCE_MAPPINGS}</tbody>
     </table>
     <br />
-    <p>Logout only invalidate session.</p>
     <form action="/logout">
       <button id="logout">Logout</button>
     </form>
+    <p>The logout button only invalidates the session, it does not log out the user on the OAuth2 server.</p>
   </div>
 </body>
 

@@ -76,7 +76,6 @@
           <instructions>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Import-Package>
-              org.everit.authentication.oauth2.ri.internal;version="[1.0,2)",
               *
             </Import-Package>
             <Export-Package>
