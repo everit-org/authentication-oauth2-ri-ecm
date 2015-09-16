@@ -26,8 +26,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
 
 /**
- * Abstract Servlet for read pages.
+ * Abstract Servlet for handling HTML page templates.
  */
+// TODO use the new ECM that support inheritance
 public abstract class AbstractServlet extends HttpServlet {
 
   protected String pageContent;

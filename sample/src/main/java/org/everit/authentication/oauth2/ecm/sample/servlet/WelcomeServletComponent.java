@@ -54,7 +54,7 @@ import com.mysema.query.sql.SQLQuery;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * Servlet that shows the welcome page.
+ * Servlet that shows the welcome.html page.
  */
 @Component
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
@@ -117,8 +117,7 @@ public class WelcomeServletComponent extends AbstractServlet {
   }
 
   private String getProviderName(final HttpSession session) {
-    return String.valueOf(
-        session.getAttribute(oauth2SessionAttributeNames.providerName()));
+    return String.valueOf(session.getAttribute(oauth2SessionAttributeNames.providerName()));
   }
 
   private String getResourceMappings() {

@@ -33,7 +33,7 @@ import org.osgi.framework.BundleContext;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * Servlet that shows the index page.
+ * Servlet that shows the index.html page.
  */
 @Component
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
@@ -61,4 +61,5 @@ public class IndexServletComponent extends AbstractServlet {
     PrintWriter writer = resp.getWriter();
     writer.write(pageContent);
   }
+
 }

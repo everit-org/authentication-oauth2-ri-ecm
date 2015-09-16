@@ -42,7 +42,7 @@ import org.osgi.framework.Constants;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * OAuth2 Authentication Servlet component.
+ * ECM component for {@link OAuth2AuthenticationServlet}.
  */
 @Component(
     componentId = OAuth2AuthenticationServletConstants.SERVICE_FACTORYPID_OAUTH2_AUTHENTICATION_SERVLET, // CS_DISABLE_LINE_LENGTH
@@ -52,7 +52,7 @@ import aQute.bnd.annotation.headers.ProvideCapability;
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
         defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_SERVICE_DESCRIPTION),
-    @StringAttribute(attributeId = OAuth2AuthenticationServletConstants.PROP_PROVIDER_NAME) })
+    @StringAttribute(attributeId = OAuth2AuthenticationServletConstants.ATTR_PROVIDER_NAME) })
 @Service(Servlet.class)
 public class OAuth2AuthenticationServletComponent
     extends HttpServlet {
@@ -61,7 +61,7 @@ public class OAuth2AuthenticationServletComponent
 
   private String failedUrl;
 
-  private OAuth2AuthenticationServlet oauth2AuthenticationServlet;
+  private HttpServlet oauth2AuthenticationServlet;
 
   private OAuth2Communicator oauth2Communicator;
 
@@ -74,7 +74,7 @@ public class OAuth2AuthenticationServletComponent
   private String successUrl;
 
   /**
-   * Component activator method.
+   * Component activator method that instantiates the wrapped {@link OAuth2AuthenticationServlet}.
    */
   @Activate
   public void activate() {
@@ -93,7 +93,7 @@ public class OAuth2AuthenticationServletComponent
   }
 
   @ServiceRef(
-      attributeId = OAuth2AuthenticationServletConstants.SERVICE_AUTHENTICATION_SESSION_ATTRIBUTE_NAMES, // CS_DISABLE_LINE_LENGTH
+      attributeId = OAuth2AuthenticationServletConstants.ATTR_AUTHENTICATION_SESSION_ATTRIBUTE_NAMES, // CS_DISABLE_LINE_LENGTH
       defaultValue = "")
   public void setAuthenticationSessionAttributeNames(
       final AuthenticationSessionAttributeNames authenticationSessionAttributeNames) {
@@ -101,28 +101,28 @@ public class OAuth2AuthenticationServletComponent
   }
 
   @StringAttribute(
-      attributeId = OAuth2AuthenticationServletConstants.PROP_SUCCESS_URL,
+      attributeId = OAuth2AuthenticationServletConstants.ATTR_SUCCESS_URL,
       defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_SUCCESS_URL)
   public void setAuthenticationSuccessUrl(final String successUrl) {
     this.successUrl = successUrl;
   }
 
   @StringAttribute(
-      attributeId = OAuth2AuthenticationServletConstants.PROP_FAILED_URL,
+      attributeId = OAuth2AuthenticationServletConstants.ATTR_FAILED_URL,
       defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_FAILED_URL)
   public void setFailedUrl(final String failedUrl) {
     this.failedUrl = failedUrl;
   }
 
   @ServiceRef(
-      attributeId = OAuth2AuthenticationServletConstants.SERVICE_OAUTH2_COMMUNICATOR,
+      attributeId = OAuth2AuthenticationServletConstants.ATTR_OAUTH2_COMMUNICATOR,
       defaultValue = "")
   public void setOauth2Communicator(final OAuth2Communicator oauth2Communicator) {
     this.oauth2Communicator = oauth2Communicator;
   }
 
   @ServiceRef(
-      attributeId = OAuth2AuthenticationServletConstants.SERVICE_OAUTH2_SESSION_ATTRIBUTE_NAMES,
+      attributeId = OAuth2AuthenticationServletConstants.ATTR_OAUTH2_SESSION_ATTRIBUTE_NAMES,
       defaultValue = "")
   public void setOauth2SessionAttributeNames(
       final OAuth2SessionAttributeNames oauth2SessionAttributeNames) {
@@ -130,14 +130,14 @@ public class OAuth2AuthenticationServletComponent
   }
 
   @StringAttribute(
-      attributeId = OAuth2AuthenticationServletConstants.PROP_PROCESS_REQUEST_TOKEN_PATH_INFO,
+      attributeId = OAuth2AuthenticationServletConstants.ATTR_PROCESS_REQUEST_TOKEN_PATH_INFO,
       defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_PROCESS_REQUEST_TOKEN_PATH_INFO)
   public void setProcessRequestTokenPathInfo(final String processRequestTokenPathInfo) {
     this.processRequestTokenPathInfo = processRequestTokenPathInfo;
   }
 
   @ServiceRef(
-      attributeId = OAuth2AuthenticationServletConstants.SERVICE_RESOURCE_ID_RESOLVER,
+      attributeId = OAuth2AuthenticationServletConstants.ATTR_RESOURCE_ID_RESOLVER,
       defaultValue = "")
   public void setResourceIdResolver(final ResourceIdResolver resourceIdResolver) {
     this.resourceIdResolver = resourceIdResolver;

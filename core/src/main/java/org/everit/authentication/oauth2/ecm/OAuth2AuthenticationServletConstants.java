@@ -20,6 +20,30 @@ package org.everit.authentication.oauth2.ecm;
  */
 public final class OAuth2AuthenticationServletConstants {
 
+  public static final String ATTR_AUTHENTICATION_SESSION_ATTRIBUTE_NAMES =
+      "authenticationSessionAttributeNames.target";
+
+  public static final String ATTR_FAILED_URL =
+      "oauth2.authentication.failed.url";
+
+  public static final String ATTR_OAUTH2_COMMUNICATOR =
+      "oauth2Communicator.target";
+
+  public static final String ATTR_OAUTH2_SESSION_ATTRIBUTE_NAMES =
+      "oauth2SessionAttributeNames.target";
+
+  public static final String ATTR_PROCESS_REQUEST_TOKEN_PATH_INFO =
+      "oauth2.process.request.token.path.info";
+
+  public static final String ATTR_PROVIDER_NAME =
+      "oauth2.provider.name";
+
+  public static final String ATTR_RESOURCE_ID_RESOLVER =
+      "resourceIdResolver.target";
+
+  public static final String ATTR_SUCCESS_URL =
+      "oauth2.authentication.success.url";
+
   public static final String DEFAULT_FAILED_URL = "/failed";
 
   public static final String DEFAULT_PROCESS_REQUEST_TOKEN_PATH_INFO = "/processRequestToken";
@@ -28,32 +52,8 @@ public final class OAuth2AuthenticationServletConstants {
 
   public static final String DEFAULT_SUCCESS_URL = "/welcome";
 
-  public static final String PROP_FAILED_URL =
-      "oauth2.authentication.failed.url";
-
-  public static final String PROP_PROCESS_REQUEST_TOKEN_PATH_INFO =
-      "oauth2.process.request.token.path.info";
-
-  public static final String PROP_PROVIDER_NAME =
-      "oauth2.provider.name";
-
-  public static final String PROP_SUCCESS_URL =
-      "oauth2.authentication.success.url";
-
-  public static final String SERVICE_AUTHENTICATION_SESSION_ATTRIBUTE_NAMES =
-      "authenticationSessionAttributeNames.target";
-
   public static final String SERVICE_FACTORYPID_OAUTH2_AUTHENTICATION_SERVLET =
       "org.everit.authentication.oauth2.ecm.OAuth2AuthenticationServlet";
-
-  public static final String SERVICE_OAUTH2_COMMUNICATOR =
-      "oauth2Communicator.target";
-
-  public static final String SERVICE_OAUTH2_SESSION_ATTRIBUTE_NAMES =
-      "oauth2SessionAttributeNames.target";
-
-  public static final String SERVICE_RESOURCE_ID_RESOLVER =
-      "resourceIdResolver.target";
 
   private OAuth2AuthenticationServletConstants() {
   }

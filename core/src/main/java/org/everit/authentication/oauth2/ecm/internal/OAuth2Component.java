@@ -42,7 +42,7 @@ import org.osgi.framework.Constants;
 import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
- * Create and Provide OAuth2 services.
+ * ECM component for {@link OAuth2ResourceIdResolverImpl} and {@link OAuth2OltuCommunicatorImpl}.
  */
 @Component(
     componentId = OAuth2Constants.SERVICE_FACTORYPID_OAUTH2,
@@ -84,12 +84,13 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
   private String userInformationRequestURI;
 
   /**
-   * Component activator method.
+   * Component activator method that instantiates the wrapped {@link ResourceIdResolver} and
+   * {@link OAuth2Communicator}.
    */
   @Activate
   public void activate() {
     resourceIdResolver = new OAuth2ResourceIdResolverImpl(
-        propertyManager, querydslSupport, resourceService, transactionHelper, providerName);
+        providerName, propertyManager, resourceService, transactionHelper, querydslSupport);
 
     oAuth2Communicator =
         new OAuth2OltuCommunicatorImpl(providerName, clientId, clientSecret, authorizationEndpoint,
@@ -97,8 +98,14 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
   }
 
   @Override
-  public String buildAuthorizationUri(final String redirectUri) {
-    return oAuth2Communicator.buildAuthorizationUri(redirectUri);
+  public String buildAuthorizationURL(final String redirectURL) {
+    return oAuth2Communicator.buildAuthorizationURL(redirectURL);
+  }
+
+  @Override
+  public Optional<AccessTokenResponse> getAccessToken(final HttpServletRequest req,
+      final String redirectUri) {
+    return oAuth2Communicator.getAccessToken(req, redirectUri);
   }
 
   @Override
@@ -116,67 +123,61 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
     return oAuth2Communicator.getUniqueUserId(accessTokenResponse);
   }
 
-  @Override
-  public Optional<AccessTokenResponse> readAccessToken(final HttpServletRequest req,
-      final String redirectUri) {
-    return oAuth2Communicator.readAccessToken(req, redirectUri);
-  }
-
-  @StringAttribute(attributeId = OAuth2Constants.PROP_AUTHORITZATION_ENDPOINT)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_AUTHORITZATION_ENDPOINT)
   public void setAuthorizationEndpoint(final String authorizationEndpoint) {
     this.authorizationEndpoint = authorizationEndpoint;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.PROP_CLIENT_ID)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_CLIENT_ID)
   public void setClientId(final String clientId) {
     this.clientId = clientId;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.PROP_CLIENT_SECRET)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_CLIENT_SECRET)
   public void setClientSecret(final String clientSecret) {
     this.clientSecret = clientSecret;
   }
 
-  @ServiceRef(attributeId = OAuth2Constants.SERVICE_PROPERTY_MANAGER,
+  @ServiceRef(attributeId = OAuth2Constants.ATTR_PROPERTY_MANAGER,
       defaultValue = "")
   public void setPropertyManager(final PropertyManager propertyManager) {
     this.propertyManager = propertyManager;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.PROP_PROVIDER_NAME)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_PROVIDER_NAME)
   public void setProviderName(final String providerName) {
     this.providerName = providerName;
   }
 
-  @ServiceRef(attributeId = OAuth2Constants.SERVICE_QUERYDSL_SUPPORT,
+  @ServiceRef(attributeId = OAuth2Constants.ATTR_QUERYDSL_SUPPORT,
       defaultValue = "")
   public void setQuerydslSupport(final QuerydslSupport querydslSupport) {
     this.querydslSupport = querydslSupport;
   }
 
-  @ServiceRef(attributeId = OAuth2Constants.SERVICE_RESOURCE_SERVICE,
+  @ServiceRef(attributeId = OAuth2Constants.ATTR_RESOURCE_SERVICE,
       defaultValue = "")
   public void setResourceService(final ResourceService resourceService) {
     this.resourceService = resourceService;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.PROP_SCOPE)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_SCOPE)
   public void setScope(final String scope) {
     this.scope = scope;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.PROP_TOKEN_ENDPOINT)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_TOKEN_ENDPOINT)
   public void setTokenEndpoint(final String tokenEndpoint) {
     this.tokenEndpoint = tokenEndpoint;
   }
 
-  @ServiceRef(attributeId = OAuth2Constants.SERVICE_TRANSACTION_HELPER,
+  @ServiceRef(attributeId = OAuth2Constants.ATTR_TRANSACTION_HELPER,
       defaultValue = "")
   public void setTransactionHelper(final TransactionHelper transactionHelper) {
     this.transactionHelper = transactionHelper;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.PROP_USER_INFORMATION_REQUEST_URI)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_USER_INFORMATION_REQUEST_URI)
   public void setUserInformationRequestURI(final String userInformationRequestURI) {
     this.userInformationRequestURI = userInformationRequestURI;
   }
