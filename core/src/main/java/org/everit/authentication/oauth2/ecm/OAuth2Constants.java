@@ -38,7 +38,7 @@ public final class OAuth2Constants {
 
   public static final String ATTR_TOKEN_ENDPOINT = "oauth2.token.endpoint";
 
-  public static final String ATTR_TRANSACTION_HELPER = "transactionHelper.target";
+  public static final String ATTR_TRANSACTION_PROPAGATOR = "transactionPropagator.target";
 
   public static final String ATTR_USER_INFORMATION_REQUEST_URI =
       "oauth2.user.information.request.uri";

@@ -36,7 +36,7 @@ import org.everit.osgi.props.PropertyManager;
 import org.everit.osgi.querydsl.support.QuerydslSupport;
 import org.everit.osgi.resource.ResourceService;
 import org.everit.osgi.resource.resolver.ResourceIdResolver;
-import org.everit.osgi.transaction.helper.api.TransactionHelper;
+import org.everit.transaction.propagator.TransactionPropagator;
 import org.osgi.framework.Constants;
 
 import aQute.bnd.annotation.headers.ProvideCapability;
@@ -77,9 +77,7 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
 
   private String tokenEndpoint;
 
-  // TODO use this instead of the transactionHelper
-  // private TransactionPropagator transactionPropagator;
-  private TransactionHelper transactionHelper;
+  private TransactionPropagator transactionPropagator;
 
   private String userInformationRequestURI;
 
@@ -90,7 +88,7 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
   @Activate
   public void activate() {
     resourceIdResolver = new OAuth2ResourceIdResolverImpl(
-        providerName, propertyManager, resourceService, transactionHelper, querydslSupport);
+        providerName, propertyManager, resourceService, transactionPropagator, querydslSupport);
 
     oAuth2Communicator =
         new OAuth2OltuCommunicatorImpl(providerName, clientId, clientSecret, authorizationEndpoint,
@@ -171,10 +169,10 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
     this.tokenEndpoint = tokenEndpoint;
   }
 
-  @ServiceRef(attributeId = OAuth2Constants.ATTR_TRANSACTION_HELPER,
+  @ServiceRef(attributeId = OAuth2Constants.ATTR_TRANSACTION_PROPAGATOR,
       defaultValue = "")
-  public void setTransactionHelper(final TransactionHelper transactionHelper) {
-    this.transactionHelper = transactionHelper;
+  public void setTransactionPropagator(final TransactionPropagator transactionPropagator) {
+    this.transactionPropagator = transactionPropagator;
   }
 
   @StringAttribute(attributeId = OAuth2Constants.ATTR_USER_INFORMATION_REQUEST_URI)
