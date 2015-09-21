@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.everit.authentication.oauth2.ecm.internal;
+package org.everit.authentication.oauth2.ri.ecm.internal;
 
 import java.io.IOException;
 
@@ -23,9 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.everit.authentication.oauth2.OAuth2Communicator;
-import org.everit.authentication.oauth2.ecm.OAuth2AuthenticationServletConstants;
 import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
 import org.everit.authentication.oauth2.ri.core.OAuth2AuthenticationServlet;
+import org.everit.authentication.oauth2.ri.ecm.OAuth2AuthenticationServletConstants;
 import org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames;
 import org.everit.osgi.ecm.annotation.Activate;
 import org.everit.osgi.ecm.annotation.Component;

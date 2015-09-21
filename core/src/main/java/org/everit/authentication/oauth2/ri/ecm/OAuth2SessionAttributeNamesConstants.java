@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.everit.authentication.oauth2.ecm;
+package org.everit.authentication.oauth2.ri.ecm;
 
 /**
  * Constants of the OAuth2 Session Attribute Names component.
@@ -36,7 +36,7 @@ public final class OAuth2SessionAttributeNamesConstants {
       "Default OAuth2 Session Attribute Names";
 
   public static final String SERVICE_FACTORYPID_OAUTH2_SESSION_ATTRIBUTE_NAMES =
-      "org.everit.authentication.oauth2.ecm.OAuth2SessionAttributeNames";
+      "org.everit.authentication.oauth2.ri.ecm.OAuth2SessionAttributeNames";
 
   private OAuth2SessionAttributeNamesConstants() {
   }

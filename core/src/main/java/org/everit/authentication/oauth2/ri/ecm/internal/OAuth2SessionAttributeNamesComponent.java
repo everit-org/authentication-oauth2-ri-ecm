@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.everit.authentication.oauth2.ecm.internal;
+package org.everit.authentication.oauth2.ri.ecm.internal;
 
-import org.everit.authentication.oauth2.ecm.OAuth2SessionAttributeNamesConstants;
 import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
+import org.everit.authentication.oauth2.ri.ecm.OAuth2SessionAttributeNamesConstants;
 import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
 import org.everit.osgi.ecm.annotation.Service;

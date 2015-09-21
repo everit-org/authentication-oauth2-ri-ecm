@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.everit.authentication.oauth2.ecm;
+package org.everit.authentication.oauth2.ri.ecm;
 
 /**
  * Constants of the OAuth2 Authentication Servlet component.
@@ -53,7 +53,7 @@ public final class OAuth2AuthenticationServletConstants {
   public static final String DEFAULT_SUCCESS_URL = "/welcome";
 
   public static final String SERVICE_FACTORYPID_OAUTH2_AUTHENTICATION_SERVLET =
-      "org.everit.authentication.oauth2.ecm.OAuth2AuthenticationServlet";
+      "org.everit.authentication.oauth2.ri.ecm.OAuth2AuthenticationServlet";
 
   private OAuth2AuthenticationServletConstants() {
   }

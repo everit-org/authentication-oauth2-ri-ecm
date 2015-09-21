@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.everit.authentication.oauth2.ecm;
+package org.everit.authentication.oauth2.ri.ecm;
 
 /**
  * Constants of the OAuth2 component.
@@ -46,7 +46,7 @@ public final class OAuth2Constants {
   public static final String DEFAULT_SERVICE_DESCRIPTION = "Default OAuth2 Component";
 
   public static final String SERVICE_FACTORYPID_OAUTH2 =
-      "org.everit.authentication.oauth2.ecm.OAuth2";
+      "org.everit.authentication.oauth2.ri.ecm.OAuth2";
 
   private OAuth2Constants() {
   }
