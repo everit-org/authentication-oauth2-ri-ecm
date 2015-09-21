@@ -15,8 +15,8 @@
  */
 package org.everit.authentication.oauth2.ecm.internal;
 
-import org.everit.authentication.oauth2.OAuth2SessionAttributeNames;
 import org.everit.authentication.oauth2.ecm.OAuth2SessionAttributeNamesConstants;
+import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
 import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
 import org.everit.osgi.ecm.annotation.Service;

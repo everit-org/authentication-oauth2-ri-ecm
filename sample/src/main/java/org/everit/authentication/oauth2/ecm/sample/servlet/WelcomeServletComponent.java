@@ -33,7 +33,7 @@ import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
-import org.everit.authentication.oauth2.OAuth2SessionAttributeNames;
+import org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames;
 import org.everit.authentication.oauth2.ri.schema.qdsl.QOAuth2Provider;
 import org.everit.authentication.oauth2.ri.schema.qdsl.QOAuth2ResourceMapping;
 import org.everit.osgi.authentication.context.AuthenticationContext;
