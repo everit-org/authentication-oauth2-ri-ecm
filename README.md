@@ -47,15 +47,13 @@ client registrations and the application start. The ```client id``` and
 (```org.everit.authentication.oauth2.ri.ecm.OAuth2```) components:
 * Replace the ```MY_GOOGLE_CLIENT_ID``` and ```MY_GOOGLE_CLIENT_SECRET``` 
 values with the ```client id``` and ```client secret``` obtained from 
-Google on the Google OAuth2 Component configuration URL:
-```https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.cfb8ede0-f72b-4106-a100-f18087606aff```
+Google on the [Google OAuth2 Component configuration][8].
 * Replace the ```MY_FACEBOOK_CLIENT_ID``` and ```MY_FACEBOOK_CLIENT_SECRET``` 
 values with ```client id``` and ```client secret``` obtained from 
-Facebook on the Facebook OAuth2 Component configuration URL:
-```https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.c7fb1164-ae00-45dd-af3c-556a6c440f78```
+Facebook on the [Facebook OAuth2 Component configuration][9].
 
 After the successful configuration the sample application can be accessed on 
-```https://localhost:8443/index```.
+[https://localhost:8443/index][10].
 
 Continue reading for more information about detailed configuration and 
 customization.
@@ -71,3 +69,6 @@ TBD TBD TBD.
 [5]: https://github.com/everit-org/authentication-oauth2-ri-ecm
 [6]: https://developers.google.com/identity/sign-in/web/devconsole-project
 [7]: https://developers.facebook.com/docs/apps/register
+[8]: https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.cfb8ede0-f72b-4106-a100-f18087606aff
+[9]: https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.c7fb1164-ae00-45dd-af3c-556a6c440f78
+[10]: https://localhost:8443/index
