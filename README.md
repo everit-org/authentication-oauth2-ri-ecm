@@ -47,7 +47,7 @@ client registrations and the application start. The ```client id``` and
 (```org.everit.authentication.oauth2.ri.ecm.OAuth2```) components:
 * Replace the ```MY_GOOGLE_CLIENT_ID``` and ```MY_GOOGLE_CLIENT_SECRET``` 
 values with the ```client id``` and ```client secret``` obtained from 
-Google on the Google OAuth2 Component configuration URL: 
+Google on the Google OAuth2 Component configuration URL:
 ```https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.cfb8ede0-f72b-4106-a100-f18087606aff```
 * Replace the ```MY_FACEBOOK_CLIENT_ID``` and ```MY_FACEBOOK_CLIENT_SECRET``` 
 values with ```client id``` and ```client secret``` obtained from 
@@ -57,12 +57,12 @@ Facebook on the Facebook OAuth2 Component configuration URL:
 After the successful configuration the sample application can be accessed on 
 ```https://localhost:8443/index```.
 
-For more information about detailed configuration and customization continue 
-reading the Tutorial.
+Continue reading for more information about detailed configuration and 
+customization.
 
 # Tutorial
 
-TBD.
+TBD TBD TBD.
 
 [1]: https://everitorg.wordpress.com/2015/03/24/everit-component-model-1-0-0-release/
 [2]: https://github.com/everit-org/authentication-oauth2-ri
