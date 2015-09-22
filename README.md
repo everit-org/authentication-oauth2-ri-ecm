@@ -1,7 +1,7 @@
 # authentication-oauth2-ecm
 **DRAFT**
 
-[ECM][1] based components for [authentication-oauth2-ri][2].
+[ECM][1] based OSGi components for [authentication-oauth2-ri][2].
 
 # Modules
 * core: ECM based components.
