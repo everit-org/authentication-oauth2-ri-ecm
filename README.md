@@ -1,89 +1,74 @@
 # authentication-oauth2-ecm
-**DRAFT**
 
-[ECM][1] based OSGi components for [authentication-oauth2-ri][2].
+The EverIT authentication-oauth2 is a general solution for OAuth 2.0 
+based on [EverIT Authentication][3].
+
+Git repositories of the solution to support different implementations and 
+easier usage:
+* [authentication-oauth2-api][4]: API to be able to implement custom OAuth2 
+authentication logic or provider specific solutions.
+* [authentication-oauth2-ri][2]: The reference implementation of the API with 
+implementation specific API and database schema. This implementation was 
+tested with Google and Facebook.
+* [authentication-oauth2-ri-ecm][5]: ECM based OSGi components of the 
+reference implementation and a sample application.
 
 # Modules
-* core: ECM based components.
-* sample: sample with ECM components.
+* core: the [ECM][1] based components.
+* sample: sample application with ECM components.
 
-# Usage
-It's simple to use components as you can see in sample application. You can see how to configure the components and how work solution.
+# Quick Start Guide
 
-## Build 
+The sample application is a pre-configured OSGi application based on EverIT 
+solutions. The sample application must be registered in 
+[Google Dev Console][6] and/or [Facebook App Registration][7] to obtain the 
+```“client id”``` and ```“client secret”```. During the client application 
+registration the following redirect URLs must be set in case of:
+* Google: [https://localhost:8443/sign-in-with-google/processRequestToken]
+* Facebook: [https://localhost:8443/sign-in-with-facebook/processRequestToken]
 
-Build sample module.
+*(These two URLs are constructed based on the configuration of the sample 
+application and can be changed.)*
+
+To build and run the sample application the following commands must be 
+executed on ```authentication-oauth2-ri-ecm```:
 
 ```
-mvn clean bundle:install
+cd sample
+mvn clean eosgi:dist
+cd target/eosgi-dist/oauth2-sample-app/bin
+runConsole.bat (or ./runConsole.sh)
 ```
 
-Navigate to bin folder in sample module.
-```
-cd sample/target/sample/target/eosgi-dist/equinoxtest/bin
-``` 
+Some configurtaion must be changed on the OSGi Web Console 
+(```https://localhost:4848/system/console/configMgr```) after the successful 
+client registrations and the application start. The ```“client id”``` and 
+```“client secret”``` must be configured in the ```Everit OAuth2 Component``` 
+(```org.everit.authentication.oauth2.ri.ecm.OAuth2```) components:
+* Replace the ```“MY_GOOGLE_CLIENT_ID”``` and ```“MY_GOOGLE_CLIENT_SECRET”``` 
+values with the ```“client id”``` and ```“client secret”``` obtained from 
+Google on the Google OAuth2 Component configuration URL: 
+```https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.cfb8ede0-f72b-4106-a100-f18087606aff```
+* Replace the ```“MY_FACEBOOK_CLIENT_ID”``` and ```“MY_FACEBOOK_CLIENT_SECRET”``` 
+values with ```“client id”``` and ```“client secret”``` obtained from 
+Facebook on the Facebook OAuth2 Component configuration URL:
+```https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.c7fb1164-ae00-45dd-af3c-556a6c440f78```
 
-Run server.
-```
-./runConsole.sh or runConsole.bat
-```
+After the successful configuration the sample application can be accessed on 
+```https://localhost:8443/index```.
 
-## Configurable Components
+For more information about detailed configuration and customization continue 
+reading the Tutorial.
 
-Configurable components in authentication-oauth2-ecm project. You can configurable components in https://localhost:4848/system/console/configMgr.
-We already configurate components, but you must be finish. Only type client ID and client secret the OAuth2Component after you register a client in [Google][3] and/or [Facebook][4].
-When you register client in Google must be add https://localhost:8443/oauth2-redirect?providerName=google redirect URL. In Facebook the redirect URL is https://localhost:8443/oauth2-redirect?providerName=facebook.
+# Tutorial
 
-### DefaultOAuth2UserIdResolverComponent
-
-That's component provide OAuth2UserIdResolver that obtain userID from OAuth2 server.
-
-#### Settings
-* **Provider Name**: the OAuth2 provider name. Example: google.
-* **userInformationRequestURI !!name!!**: the request URI from we obtain the unique user ID. Example: https://www.googleapis.com/userinfo/v2/me.
-
-### OAuth2Component
-
-That's component responsible to help configuration. Provides ResourceIdResolver, OAuth2Communicator and OAuth2UserIdResolver (wrapped the DefaultOAuth2UserIdResolverComponent).
-For the reason provides many interface it's has many configuration settings.
-
-
-#### Settings
-* **Provider Name**: the OAuth2 provider name.
-* **Client Id**: The client ID of the registered client (application) in OAuth2 server.
-* **Client Secret**: The client secret of the registered client (application) in OAuth2 server.
-* **Redirect Endpoint**: The redirect endpoint which registered in OAuth2 server.
-* **Authorization Endpoint**: The authorization endpoint of OAuth2 server.
-* **Token Endpoint**: The token endpoint of OAuth2 server. 
-* **Scope**: the scope of the access request. OAuth2 server specific.
-* **oauth2UserIdResolverWrapped !!name!!**:
-* **Resource Service OSGi filter**:
-* **Querydsl Support OSGi filter**:
-* **Transaction Helper OSGi filter**:
-
-### OAuth2AuthenticationServletComponent
-
-That's component provide OAuth2AuthenticationServlet that manage OAuth2 authentication. It can be used two ways:
-* only create one instance (recommended),
-* create many instance (separate OAuth2 servers).
-
-**In sample we create only one instance.**
-
-#### Settings
-* **Provider Name**: the OAuth2 provider name. Example: all (if has create one instance).
-* **Success URL**: The URL where the user will be redirected by default in case of a successful authentication.
-* **Failed URL**: The URL where the user will be redirected by default in case of a failed authentication. 
-* **Login Endpoint Path**: The servlet path where the user start authentication process.
-* **Redirect Endpoint Path**: The servlet path where the OAuth2 server redirect. 
-* **oAuth2Services.clause.name**: List of OAuth2Services (OAuth2Components).
-
-If add only one oAuth2Services.clause.name not use OAuth2AuthenticationServlet _providerName_ parameter, but if add more than one oAuth2Services.clause.name use and requires _providerName_ parameter.
-
-## Test
-
-If configurate components to use application. Only to be open https://localhost:8443/index page.
+TBD
 
 [1]: https://everitorg.wordpress.com/2015/03/24/everit-component-model-1-0-0-release/
 [2]: https://github.com/everit-org/authentication-oauth2-ri
-[3]: https://developers.google.com/identity/sign-in/web/devconsole-project
-[4]: https://developers.facebook.com/docs/apps/register
+[3]: https://everitorg.wordpress.com/2014/07/31/everit-authentication
+[4]: https://github.com/everit-org/authentication-oauth2-api
+[5]: https://github.com/everit-org/authentication-oauth2-ri-ecm
+[6]: https://developers.google.com/identity/sign-in/web/devconsole-project
+[7]: https://developers.facebook.com/docs/apps/register
+[8]: https://localhost:4848/system/console/configMgr
