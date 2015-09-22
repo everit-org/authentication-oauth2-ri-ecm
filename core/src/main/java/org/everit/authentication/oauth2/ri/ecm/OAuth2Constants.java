@@ -40,8 +40,8 @@ public final class OAuth2Constants {
 
   public static final String ATTR_TRANSACTION_PROPAGATOR = "transactionPropagator.target";
 
-  public static final String ATTR_USER_INFORMATION_REQUEST_URI =
-      "oauth2.user.information.request.uri";
+  public static final String ATTR_USER_INFORMATION_REQUEST_URL =
+      "oauth2.user.information.request.url";
 
   public static final String DEFAULT_SERVICE_DESCRIPTION = "Default OAuth2 Component";
 

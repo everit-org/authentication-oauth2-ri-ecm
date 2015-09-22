@@ -79,7 +79,7 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
 
   private TransactionPropagator transactionPropagator;
 
-  private String userInformationRequestURI;
+  private String userInformationRequestURL;
 
   /**
    * Component activator method that instantiates the wrapped {@link ResourceIdResolver} and
@@ -92,7 +92,7 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
 
     oAuth2Communicator =
         new OAuth2OltuCommunicatorImpl(providerName, clientId, clientSecret, authorizationEndpoint,
-            tokenEndpoint, scope, userInformationRequestURI);
+            tokenEndpoint, scope, userInformationRequestURL);
   }
 
   @Override
@@ -175,9 +175,9 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
     this.transactionPropagator = transactionPropagator;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.ATTR_USER_INFORMATION_REQUEST_URI)
-  public void setUserInformationRequestURI(final String userInformationRequestURI) {
-    this.userInformationRequestURI = userInformationRequestURI;
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_USER_INFORMATION_REQUEST_URL)
+  public void setUserInformationRequestURL(final String userInformationRequestURL) {
+    this.userInformationRequestURL = userInformationRequestURL;
   }
 
 }

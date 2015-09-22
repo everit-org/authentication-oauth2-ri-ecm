@@ -24,23 +24,20 @@
 </head>
 
 <body>
-  <div>
-    <p>
-      <b>IMPORTANT:</b> Configure the OAuth2 components on the <a href="https://localhost:4848/system/console/configMgr">Web
-        Console</a> with "Client ID" and "Client Secret" provided by <a
-        href="https://developers.google.com/identity/sign-in/web/devconsole-project">Google</a> and/or <a
-        href="https://developers.facebook.com/docs/apps/register">Facebook</a> before try this sample.
-    </p>
-  </div>
-  <br />
+  <h2>Everit OAuth2 Sample applicaiton</h2>
   <form action="/sign-in-with-google" method="get">
     <button>Sign in with Google</button>
   </form>
   <br />
-  <br />
   <form action="/sign-in-with-facebook">
     <button>Sign in with Facebook</button>
   </form>
+  <p>
+    <i>In case of "Error: invalid_client"/"Invalid application ID." errors from Google/Facebook please check your
+      configuration on the <a href="https://localhost:4848/system/console/configMgr" target="_blank">Web Console</a> and
+      read the <a href="" target="_blank">Quick start guide</a> and the <a href="" target="_blank">Tutorial</a>.
+    </i>
+  </p>
 </body>
 
 </html>

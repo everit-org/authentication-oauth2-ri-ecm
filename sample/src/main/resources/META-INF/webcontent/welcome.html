@@ -24,27 +24,26 @@
 </head>
 
 <body>
-  <div>
-    <p>Welcome ${FULL_NAME}! You were authenticated via [${PROVIDER_NAME}].</p>
-    <br />
-    <p>Authenticated Resource ID: ${AUTHENTICATED_RESOURCE_ID}</p>
-    <p>Resource mappings:</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Resource ID</th>
-          <th>Provider name</th>
-          <th>Unique user ID</th>
-        </tr>
-      </thead>
-      <tbody>${RESOURCE_MAPPINGS}</tbody>
-    </table>
-    <br />
-    <form action="/logout">
-      <button>Logout</button>
-    </form>
-    <p>The logout button only invalidates the session, it does not log out the user on the OAuth2 server.</p>
-  </div>
+  <h2>Welcome ${FULL_NAME}!</h2>
+  <p>You were authenticated via [${PROVIDER_NAME}].</p>
+  <p>Your authenticated Resource ID: ${AUTHENTICATED_RESOURCE_ID}</p>
+  <p>Resource mappings:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Resource ID</th>
+        <th>Provider name</th>
+        <th>Unique user ID</th>
+      </tr>
+    </thead>
+    <tbody>${RESOURCE_MAPPINGS}
+    </tbody>
+  </table>
+  <br />
+  <form action="/logout">
+    <button>Logout</button>
+  </form>
+  <i>The logout button only invalidates your session in this sample application, it does not log out you on the OAuth2 server (${PROVIDER_NAME}).</i>
 </body>
 
 </html>

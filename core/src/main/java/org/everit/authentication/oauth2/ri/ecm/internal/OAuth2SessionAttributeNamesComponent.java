@@ -85,41 +85,41 @@ public class OAuth2SessionAttributeNamesComponent implements OAuth2SessionAttrib
 
   @StringAttribute(
       attributeId = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_ACCESS_TOKEN,
-      defaultValue = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_ACCESS_TOKEN)
+      defaultValue = OAuth2SessionAttributeNamesConstants.DEFAULT_SESSION_ATTR_NAME_ACCESS_TOKEN)
   public void setSessionAttrNameAccessToken(final String sessionAttrNameAccessToken) {
     this.sessionAttrNameAccessToken = sessionAttrNameAccessToken;
   }
 
   @StringAttribute(
       attributeId = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_ACCESS_TOKEN_TYPE,
-      defaultValue = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_ACCESS_TOKEN_TYPE)
+      defaultValue = OAuth2SessionAttributeNamesConstants.DEFAULT_SESSION_ATTR_NAME_ACCESS_TOKEN_TYPE) // CS_DISABLE_LINE_LENGTH
   public void setSessionAttrNameAccessTokenType(final String sessionAttrNameAccessTokenType) {
     this.sessionAttrNameAccessTokenType = sessionAttrNameAccessTokenType;
   }
 
   @StringAttribute(
       attributeId = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_EXPIRES_IN,
-      defaultValue = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_EXPIRES_IN)
+      defaultValue = OAuth2SessionAttributeNamesConstants.DEFAULT_SESSION_ATTR_NAME_EXPIRES_IN)
   public void setSessionAttrNameExpiresIn(final String sessionAttrNameExpiresIn) {
     this.sessionAttrNameExpiresIn = sessionAttrNameExpiresIn;
   }
 
   @StringAttribute(
       attributeId = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_REFRESH_TOKEN,
-      defaultValue = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_REFRESH_TOKEN)
+      defaultValue = OAuth2SessionAttributeNamesConstants.DEFAULT_SESSION_ATTR_NAME_REFRESH_TOKEN)
   public void setSessionAttrNameRefreshToken(final String sessionAttrNameRefreshToken) {
     this.sessionAttrNameRefreshToken = sessionAttrNameRefreshToken;
   }
 
   @StringAttribute(attributeId = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_SCOPE,
-      defaultValue = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_SCOPE)
+      defaultValue = OAuth2SessionAttributeNamesConstants.DEFAULT_SESSION_ATTR_NAME_SCOPE)
   public void setSessionAttrNameScope(final String sessionAttrNameScope) {
     this.sessionAttrNameScope = sessionAttrNameScope;
   }
 
   @StringAttribute(
       attributeId = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_PROVIDER_NAME,
-      defaultValue = OAuth2SessionAttributeNamesConstants.ATTR_SESSION_ATTR_NAME_PROVIDER_NAME)
+      defaultValue = OAuth2SessionAttributeNamesConstants.DEFAULT_SESSION_ATTR_NAME_PROVIDER_NAME)
   public void setSessionAttrProviderName(final String sessionAttrProviderName) {
     this.sessionAttrProviderName = sessionAttrProviderName;
   }

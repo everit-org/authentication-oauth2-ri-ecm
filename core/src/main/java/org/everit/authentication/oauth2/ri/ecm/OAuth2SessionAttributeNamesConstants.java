@@ -20,20 +20,44 @@ package org.everit.authentication.oauth2.ri.ecm;
  */
 public final class OAuth2SessionAttributeNamesConstants {
 
-  public static final String ATTR_SESSION_ATTR_NAME_ACCESS_TOKEN = "oauth2.access.token";
+  public static final String ATTR_SESSION_ATTR_NAME_ACCESS_TOKEN =
+      "oauth2.session.attr.name.access.token";
 
-  public static final String ATTR_SESSION_ATTR_NAME_ACCESS_TOKEN_TYPE = "oauth2.access.token.type";
+  public static final String ATTR_SESSION_ATTR_NAME_ACCESS_TOKEN_TYPE =
+      "oauth2.session.attr.name.access.token.type";
 
-  public static final String ATTR_SESSION_ATTR_NAME_EXPIRES_IN = "oauth2.expires.in";
+  public static final String ATTR_SESSION_ATTR_NAME_EXPIRES_IN =
+      "oauth2.session.attr.name.expires.in";
 
-  public static final String ATTR_SESSION_ATTR_NAME_PROVIDER_NAME = "oauth2.provider.name";
+  public static final String ATTR_SESSION_ATTR_NAME_PROVIDER_NAME =
+      "oauth2.session.attr.name.provider.name";
 
-  public static final String ATTR_SESSION_ATTR_NAME_REFRESH_TOKEN = "oauth2.refresh.token";
+  public static final String ATTR_SESSION_ATTR_NAME_REFRESH_TOKEN =
+      "oauth2.session.attr.name.refresh.token";
 
-  public static final String ATTR_SESSION_ATTR_NAME_SCOPE = "oauth2.scope";
+  public static final String ATTR_SESSION_ATTR_NAME_SCOPE =
+      "oauth2.session.attr.name.scope";
 
   public static final String DEFAULT_SERVICE_DESCRIPTION =
       "Default OAuth2 Session Attribute Names";
+
+  public static final String DEFAULT_SESSION_ATTR_NAME_ACCESS_TOKEN =
+      "oauth2.access.token";
+
+  public static final String DEFAULT_SESSION_ATTR_NAME_ACCESS_TOKEN_TYPE =
+      "oauth2.access.token.type";
+
+  public static final String DEFAULT_SESSION_ATTR_NAME_EXPIRES_IN =
+      "oauth2.expires.in";
+
+  public static final String DEFAULT_SESSION_ATTR_NAME_PROVIDER_NAME =
+      "oauth2.provider.name";
+
+  public static final String DEFAULT_SESSION_ATTR_NAME_REFRESH_TOKEN =
+      "oauth2.refresh.token";
+
+  public static final String DEFAULT_SESSION_ATTR_NAME_SCOPE =
+      "oauth2.scope";
 
   public static final String SERVICE_FACTORYPID_OAUTH2_SESSION_ATTRIBUTE_NAMES =
       "org.everit.authentication.oauth2.ri.ecm.OAuth2SessionAttributeNames";
