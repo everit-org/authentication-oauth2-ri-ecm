@@ -97,11 +97,9 @@ Server side. (```oauth2.user.information.request.url```)
 * **Resource Service**: OSGi Service filter expression for 
 ```org.everit.osgi.resource.ResourceService```. (```resourceService.target```)
 * **Querydsl Support**: OSGi Service filter expression for 
-```org.everit.osgi.querydsl.support.QuerydslSupport```. 
-(```querydslSupport.target```)
+```org.everit.osgi.querydsl.support.QuerydslSupport```. (```querydslSupport.target```)
 * **Transaction Propagator**: OSGi Service filter expression for 
-```org.everit.transaction.propagator.TransactionPropagator```. 
-(```transactionPropagator.target```)
+```org.everit.transaction.propagator.TransactionPropagator```. (```transactionPropagator.target```)
 
 ## Everit OAuth2 Session Attribute Names Component
 
@@ -298,12 +296,11 @@ session-filter;url-pattern=/*;filter:=(service.pid=org.everit.osgi.authenticatio
 
 # Wiring
 
-The following diagram demonstrates the component configuration:
+The following diagram demonstrates the component configuration where the 
+boxes represent the OSGi components and the arrows represent the provided 
+OSGi services.
 
 ![wiring](https://github.com/everit-org/authentication-oauth2-ri-ecm/raw/master/img/oauth2-component-wiring.png)
-
-The boxes represent the OSGi components and the arrows represents the provided 
-OSGi services.
 
 # Relation with Everit Authentication
 
