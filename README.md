@@ -150,9 +150,7 @@ successful authentication. (```oauth2.authentication.success.url```)
 * **Failed URL**: The URL where the user will be redirected in case of a 
 failed authentication. (```oauth2.authentication.failed.url```)
 * **Request Token Path Info**: The path info of this servlet that is used to 
-create the redirect URL for the OAuth2 server. The redirect URL will be 
-constructed from the following information: 
-```[PROTOCOL]://[HOST]:[PORT]/[SERVLET_URL_PATTERN]/[REQUEST_TOKEN_PATH_INFO]```.
+create the redirect URL for the OAuth2 server, see below. 
 (```oauth2.process.request.token.path.info```)
 * **OAuth2 Session Attribute Names**: OSGi Service filter expression for 
 ```org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames```. 
