@@ -1,4 +1,4 @@
-# authentication-oauth2-ecm
+# authentication-oauth2-ri-ecm
 
 The EverIT authentication-oauth2 is a general solution for OAuth 2.0 
 based on [EverIT Authentication][3].
@@ -307,7 +307,7 @@ OSGi services.
 
 # Relation with Everit Authentication
 
-TBD
+TBD.
 
 [1]: https://everitorg.wordpress.com/2015/03/24/everit-component-model-1-0-0-release/
 [2]: https://github.com/everit-org/authentication-oauth2-ri
