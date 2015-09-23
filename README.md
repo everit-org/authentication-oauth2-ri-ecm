@@ -1,35 +1,30 @@
 # authentication-oauth2-ri-ecm
 
-The EverIT authentication-oauth2 is a general solution for OAuth 2.0 
-based on [EverIT Authentication][3].
+The *authentication-oauth2* is an OAuth 2.0 client and an authentication 
+solution based on [EverIT Authentication][3].
 
-Git repositories of the solution to support different implementations and 
-easier usage:
+The project is separated to three Git repositories to support different 
+implementations and easier usage:
 * [authentication-oauth2-api][4]: API to be able to implement custom OAuth2 
 authentication logic or provider specific solutions.
 * [authentication-oauth2-ri][2]: The reference implementation of the API with 
 implementation specific API and database schema. This implementation was 
 tested with Google and Facebook.
-* [authentication-oauth2-ri-ecm][5]: ECM based OSGi components of the 
+* [authentication-oauth2-ri-ecm][5]: [ECM][1] based OSGi components of the 
 reference implementation and a sample application.
-
-# Modules
-
-* core: the [ECM][1] based components.
-* sample: sample application with ECM components.
 
 # Quick Start Guide
 
 The sample application is a pre-configured OSGi application based on EverIT 
 solutions. The sample application must be registered in 
-[Google Dev Console][6] and/or [Facebook App Registration][7] to obtain the 
+[Google Dev Console][6] and/or [Facebook App Registration][7] to acquire the 
 `client id` and `client secret`. During the client application 
 registration the following redirect URLs must be set in case of:
 * Google: `https://localhost:8443/sign-in-with-google/processRequestToken`
 * Facebook: `https://localhost:8443/sign-in-with-facebook/processRequestToken`
 
-*(These two URLs are constructed based on the configuration of the sample 
-application and can be changed.)*
+*(These two URLs are constructed based on the configuration of the 
+application and can be changed, see below.)*
 
 To build and run the sample application the following commands must be 
 executed on `authentication-oauth2-ri-ecm`:
@@ -48,13 +43,16 @@ client registrations and the application start. The `client id` and
 (`org.everit.authentication.oauth2.ri.ecm.OAuth2`) components:
 * Replace the `MY_GOOGLE_CLIENT_ID` and `MY_GOOGLE_CLIENT_SECRET` 
 values with the `client id` and `client secret` obtained from 
-Google on the [Google OAuth2 Component configuration][8].
+Google on the OAuth2 Component configuration belonging to the google provider: 
+`https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.cfb8ede0-f72b-4106-a100-f18087606aff`
 * Replace the `MY_FACEBOOK_CLIENT_ID` and `MY_FACEBOOK_CLIENT_SECRET` 
 values with `client id` and `client secret` obtained from 
-Facebook on the [Facebook OAuth2 Component configuration][9].
+Facebook on the OAuth2 Component configuration belonging to the facebook 
+provider:
+`https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.c7fb1164-ae00-45dd-af3c-556a6c440f78`
 
 After the successful configuration the sample application can be accessed on 
-[https://localhost:8443/index][10].
+`https://localhost:8443/index`.
 
 Continue reading for more information about detailed configuration and 
 setup.
@@ -169,11 +167,16 @@ for `org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeN
 
 The Servlets and Filters used for OAuth2 authentication can be configured in 
 Everit Jetty ServletContextHandler Factory (provided by the 
-[jetty-server-component][11]). This configuration explains the sample 
-application but it can be applied in any other application easily.
+[jetty-server-component][11]). This documentation explains the configuration 
+of the sample application but it can be applied in any other application 
+easily.
 
-These following Servlet and Filter clauses are used to register the Servlets 
-and Filters to the Servlet Context. The clauses are built from three part:
+The configuration of the Jetty ServletContextHandler Factory can be accessed 
+on: 
+`https://localhost:4848/system/console/configMgr/org.everit.osgi.jetty.server.component.ServletContextHandlerFactory.a19c3b13-96fe-4df5-b4b1-b47ee2b2f7bf`
+
+Servlet and Filter clauses are used to register the Servlets and Filters to 
+the Servlet Context. These clauses are built from three part:
 * the identifier;
 * the `url-pattern` attribute describes where Servlet or Filter listens on;
 * the `filter` directive is used to determine which 
@@ -229,7 +232,8 @@ between:
 
 It handles the `sign-in-with-...` requests of the user and redirects the 
 user to the OAuth2 server. It also acquires the access token when the user 
-grants the application.
+grants the application that can be used later to access the OAuth2 server in 
+the name of the user.
 
 #### The redirect URL
 
@@ -326,7 +330,4 @@ The OAuth2 components solves the following issues:
 [5]: https://github.com/everit-org/authentication-oauth2-ri-ecm
 [6]: https://developers.google.com/identity/sign-in/web/devconsole-project
 [7]: https://developers.facebook.com/docs/apps/register
-[8]: https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.cfb8ede0-f72b-4106-a100-f18087606aff
-[9]: https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.c7fb1164-ae00-45dd-af3c-556a6c440f78
-[10]: https://localhost:8443/index
 [11]: https://github.com/everit-org/jetty-server-component
