@@ -226,7 +226,31 @@ failed;url-pattern=/failed;filter:=(objectClass=org.everit.authentication.oauth2
 
 #### OAuth2 servlets
 
-TBD
+The ```OAuth2AuthenticationServlet``` is responsible for the communication 
+between:
+* the user (the browser) and the application;
+* the application and the OAuth2 server.
+
+It handles the ```sign-in-with-...``` requests of the user and redirects the 
+user to the OAuth2 server. It also acquires the access token when the user 
+grants the application.
+
+**!!! Important !!!** The redirect URL used at client registration and sent 
+to the OAuth2 server.
+
+The redirect URL is constructed from the configuration of the application:
+
+```
+[PROTOCOL]://[HOST]:[PORT]/[SERVLET_URL_PATTERN]/[REQUEST_TOKEN_PATH_INFO]
+```
+
+* PROTOCOL: the protocol used by the application (http/https)
+* HOST: the host of the application (localhost or a registered domain)
+* PORT: the port where the connection received
+* SERVLET_URL_PATTERN: the URL where the OAuth2 Servlet is registered 
+(see below: /sign-in-with-google or /sign-in-with-facebook)
+* REQUEST_TOKEN_PATH_INFO: configured in the OAuth2 Authentication Servlet 
+(see above: /processRequestToken - by default)
 
 ###### sign-in-with-google
 
@@ -274,7 +298,12 @@ session-filter;url-pattern=/*;filter:=(service.pid=org.everit.osgi.authenticatio
 
 # Wiring
 
-TBD
+The following diagram demonstrates the component configuration:
+
+![wiring](https://github.com/everit-org/authentication-oauth2-ri-ecm/raw/master/img/oauth2-component-wiring.png)
+
+The boxes represent the OSGi components and the arrows represents the provided 
+OSGi services.
 
 # Relation with Everit Authentication
 
