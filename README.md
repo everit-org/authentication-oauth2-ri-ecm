@@ -73,9 +73,9 @@ Responsible for OAuth2 communication and resource id handling. Registers an
 It is used to easily identify the service registered by this component.
 (`service.description`)
 * **Provider Name**: The OAuth2 provider name. This value:
-  * (1) is saved to the database when a user is authenticated;
-  * (2) is stored in the session to be able to identify the current provider;
-  * (3) can be used to filter and wire the OSGi services belonging to the same 
+  * is saved to the database when a user is authenticated;
+  * is stored in the session to be able to identify the current provider;
+  * can be used to filter and wire the OSGi services belonging to the same 
 provider, for e.g.: (oauth2.provider.name=google). 
 (`oauth2.provider.name`).
 * **Client Id**: The client Id of the registered client application in 
@@ -140,9 +140,9 @@ Implements OAuth2-based authentication mechanism as a Servlet. Registers a
 It is used to easily identify the service registered by this component.
 (`service.description`)
 * **Provider Name**: The OAuth2 provider name. This value:
-  * (1) is saved to the database when a user is authenticated;
-  * (2) is stored in the session to be able to identify the current provider;
-  * (3) can be used to filter and wire the OSGi services belonging to the same 
+  * is saved to the database when a user is authenticated;
+  * is stored in the session to be able to identify the current provider;
+  * can be used to filter and wire the OSGi services belonging to the same 
 provider, for e.g.: (oauth2.provider.name=google). 
 (`oauth2.provider.name`).
 * **Success URL**: The URL where the user will be redirected in case of a 
@@ -231,10 +231,10 @@ It handles the `sign-in-with-...` requests of the user and redirects the
 user to the OAuth2 server. It also acquires the access token when the user 
 grants the application.
 
-**!!! Important !!!** The redirect URL used at client registration and sent 
-to the OAuth2 server.
+#### The redirect URL
 
-The redirect URL is constructed from the configuration of the application:
+The redirect URL used in client registration and sent to the OAuth2 server 
+is constructed from the configuration of the application:
 
 ```
 [PROTOCOL]://[HOST]:[PORT]/[SERVLET_URL_PATTERN]/[REQUEST_TOKEN_PATH_INFO]
@@ -242,13 +242,13 @@ The redirect URL is constructed from the configuration of the application:
 
 * PROTOCOL: the protocol used by the application (http/https)
 * HOST: the host of the application (localhost or a registered domain)
-* PORT: the port where the connection received
+* PORT: the port where the connections are received
 * SERVLET_URL_PATTERN: the URL where the OAuth2 Servlet is registered 
 (see below: /sign-in-with-google or /sign-in-with-facebook)
 * REQUEST_TOKEN_PATH_INFO: configured in the OAuth2 Authentication Servlet 
 (see above: /processRequestToken - by default)
 
-###### sign-in-with-google
+##### sign-in-with-google
 
 This configuration is responsible for OAuth2 Google Authentication.
 
@@ -302,7 +302,22 @@ OSGi services.
 
 # Relation with Everit Authentication
 
-TBD.
+This solution matches the [Everit Authentication Concept][3]:
+* the user is authenticated;
+* the user Id is mapped to a resource Id;
+* the resource Id of the user is stored in the session;
+* the session belongs to the user and the resource Id can be read from the 
+session and can be used to execute authenticated actions.
+
+The OAuth2 components solves the following issues:
+* the `OAuth2AuthenticationServlet` manages the authentication process:
+  * authenticates the user on the OAuth2 server
+  * queries the user Id from the OAuth2 server
+  * maps the user Id to a resource Id
+  * stores the resource Id in the session based on 
+  `OAuth2SessionAttributeNames`
+* the `OAuth2OltuCommunicatorImpl` communicates with the OAuth2 server
+* the `OAuth2ResourceIdResolverImpl` maps the user Id to a resource Id
 
 [1]: https://everitorg.wordpress.com/2015/03/24/everit-component-model-1-0-0-release/
 [2]: https://github.com/everit-org/authentication-oauth2-ri
