@@ -148,7 +148,8 @@ successful authentication. (`oauth2.authentication.success.url`)
 * **Failed URL**: The URL where the user will be redirected in case of a 
 failed authentication. (`oauth2.authentication.failed.url`)
 * **Request Token Path Info**: The path info of this servlet that is used to 
-create the redirect URL for the OAuth2 server, see below. 
+create the redirect URL for the OAuth2 server, see 
+[The redirect URL section][8]. 
 (`oauth2.process.request.token.path.info`)
 * **OAuth2 Session Attribute Names**: OSGi Service filter expression for 
 `org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames`. 
@@ -167,7 +168,7 @@ for `org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeN
 
 The Servlets and Filters used for OAuth2 authentication can be configured in 
 Everit Jetty ServletContextHandler Factory (provided by the 
-[jetty-server-component][11]). This documentation explains the configuration 
+[jetty-server-component][9]). This documentation explains the configuration 
 of the sample application but it can be applied in any other application 
 easily.
 
@@ -235,7 +236,23 @@ user to the OAuth2 server. It also acquires the access token when the user
 grants the application that can be used later to access the OAuth2 server in 
 the name of the user.
 
-#### The redirect URL
+##### sign-in-with-google
+
+This configuration is responsible for OAuth2 Google Authentication.
+
+```
+sign-in-with-google;url-pattern=/sign-in-with-google/*;filter:=(oauth2.provider.name=google)
+```
+
+##### sign-in-with-facebook
+
+This configuration is responsible for OAuth2 Facebook Authentication.
+
+```
+sign-in-with-facebook;url-pattern=/sign-in-with-facebook/*;filter:=(oauth2.provider.name=facebook)
+```
+
+##### The redirect URL
 
 The redirect URL used in client registration and sent to the OAuth2 server 
 is constructed from the configuration of the application:
@@ -252,21 +269,15 @@ is constructed from the configuration of the application:
 * REQUEST_TOKEN_PATH_INFO: configured in the OAuth2 Authentication Servlet 
 (see above: /processRequestToken - by default)
 
-##### sign-in-with-google
-
-This configuration is responsible for OAuth2 Google Authentication.
-
-```
-sign-in-with-google;url-pattern=/sign-in-with-google/*;filter:=(oauth2.provider.name=google)
-```
-
-##### sign-in-with-facebook
-
-This configuration is responsible for OAuth2 Facebook Authentication.
-
-```
-sign-in-with-facebook;url-pattern=/sign-in-with-facebook/*;filter:=(oauth2.provider.name=facebook)
-```
+For example in the sample application we configured the Jetty to use `https` 
+protocol, on `localhost:8443`. The OAuth2 servlets are configured in the 
+Servlet Context to listen on `/sign-in-with-google/*` and 
+`/sign-in-with-facebook/*`. In the configuration of the OAuth2 Authentication 
+Servlets we use the `/processRequestToken` request token path info. This is 
+how the redirect URL is built. In case of google and facebook providers, we 
+have the following URLs:
+* Google: `https://localhost:8443/sign-in-with-google/processRequestToken`
+* Facebook: `https://localhost:8443/sign-in-with-facebook/processRequestToken`
 
 #### Session Authentication Servlet
 
@@ -286,11 +297,11 @@ logout;url-pattern=/logout;filter:=(service.pid=org.everit.osgi.authentication.h
 
 This filter is applied on all (/*) requests received by the Jetty Connector. 
 It determines if there is an authenticated resource Id (that were added by 
-the `OAuth2AuthenticationServlet` previously) is assigned to the current 
+the `OAuth2AuthenticationServlet`) is assigned to the current 
 session and executes the authenticated action 
 (`chain.doFilter(request, response);`) in the name of it. Using this 
 filter the `AuthenticationContext.getCurrentResourceId()` will return 
-the resource Id assigned to the logged in user.
+the resource Id assigned to the logged in user later on the stack.
 
 ```
 session-filter;url-pattern=/*;filter:=(service.pid=org.everit.osgi.authentication.http.session.SessionAuthentication.18d78085-28e4-4b8b-990d-4ac424a585d0)
@@ -299,8 +310,8 @@ session-filter;url-pattern=/*;filter:=(service.pid=org.everit.osgi.authenticatio
 # Wiring
 
 The following diagram demonstrates the component configuration where the 
-boxes represent the OSGi components and the arrows represent the provided 
-OSGi services.
+boxes represent the configured OSGi components and the arrows represent the 
+registered OSGi services.
 
 ![wiring](https://github.com/everit-org/authentication-oauth2-ri-ecm/raw/master/img/oauth2-component-wiring.png)
 
@@ -330,4 +341,5 @@ The OAuth2 components solves the following issues:
 [5]: https://github.com/everit-org/authentication-oauth2-ri-ecm
 [6]: https://developers.google.com/identity/sign-in/web/devconsole-project
 [7]: https://developers.facebook.com/docs/apps/register
-[11]: https://github.com/everit-org/jetty-server-component
+[8]: https://github.com/everit-org/authentication-oauth2-ri-ecm#the-redirect-url
+[9]: https://github.com/everit-org/jetty-server-component
