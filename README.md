@@ -23,16 +23,16 @@ reference implementation and a sample application.
 The sample application is a pre-configured OSGi application based on EverIT 
 solutions. The sample application must be registered in 
 [Google Dev Console][6] and/or [Facebook App Registration][7] to obtain the 
-```client id``` and ```client secret```. During the client application 
+`client id` and `client secret`. During the client application 
 registration the following redirect URLs must be set in case of:
-* Google: ```https://localhost:8443/sign-in-with-google/processRequestToken```
-* Facebook: ```https://localhost:8443/sign-in-with-facebook/processRequestToken```
+* Google: `https://localhost:8443/sign-in-with-google/processRequestToken`
+* Facebook: `https://localhost:8443/sign-in-with-facebook/processRequestToken`
 
 *(These two URLs are constructed based on the configuration of the sample 
 application and can be changed.)*
 
 To build and run the sample application the following commands must be 
-executed on ```authentication-oauth2-ri-ecm```:
+executed on `authentication-oauth2-ri-ecm`:
 
 ```
 cd sample
@@ -42,15 +42,15 @@ runConsole.bat (or ./runConsole.sh)
 ```
 
 Some configurtaion must be changed on the OSGi Web Console 
-(```https://localhost:4848/system/console/configMgr```) after the successful 
-client registrations and the application start. The ```client id``` and 
-```client secret``` must be configured in the ```Everit OAuth2 Component``` 
-(```org.everit.authentication.oauth2.ri.ecm.OAuth2```) components:
-* Replace the ```MY_GOOGLE_CLIENT_ID``` and ```MY_GOOGLE_CLIENT_SECRET``` 
-values with the ```client id``` and ```client secret``` obtained from 
+(`https://localhost:4848/system/console/configMgr`) after the successful 
+client registrations and the application start. The `client id` and 
+`client secret` must be configured in the `Everit OAuth2 Component` 
+(`org.everit.authentication.oauth2.ri.ecm.OAuth2`) components:
+* Replace the `MY_GOOGLE_CLIENT_ID` and `MY_GOOGLE_CLIENT_SECRET` 
+values with the `client id` and `client secret` obtained from 
 Google on the [Google OAuth2 Component configuration][8].
-* Replace the ```MY_FACEBOOK_CLIENT_ID``` and ```MY_FACEBOOK_CLIENT_SECRET``` 
-values with ```client id``` and ```client secret``` obtained from 
+* Replace the `MY_FACEBOOK_CLIENT_ID` and `MY_FACEBOOK_CLIENT_SECRET` 
+values with `client id` and `client secret` obtained from 
 Facebook on the [Facebook OAuth2 Component configuration][9].
 
 After the successful configuration the sample application can be accessed on 
@@ -64,106 +64,106 @@ setup.
 ## Everit OAuth2 Component
 
 Responsible for OAuth2 communication and resource id handling. Registers an 
-```org.everit.authentication.oauth2.OAuth2Communicator``` and an 
-```org.everit.osgi.resource.resolver.ResourceIdResolver``` OSGi Services.
+`org.everit.authentication.oauth2.OAuth2Communicator` and an 
+`org.everit.osgi.resource.resolver.ResourceIdResolver` OSGi Services.
 
 ### Configuration
 
 * **Service Description**: The description of this component configuration. 
 It is used to easily identify the service registered by this component.
-(```service.description```)
+(`service.description`)
 * **Provider Name**: The OAuth2 provider name. This value:
   * (1) is saved to the database when a user is authenticated;
   * (2) is stored in the session to be able to identify the current provider;
   * (3) can be used to filter and wire the OSGi services belonging to the same 
 provider, for e.g.: (oauth2.provider.name=google). 
-(```oauth2.provider.name```).
+(`oauth2.provider.name`).
 * **Client Id**: The client Id of the registered client application in 
-OAuth2 server. (```oauth2.client.id```)
+OAuth2 server. (`oauth2.client.id`)
 * **Client Secret**: The client secret of the registered client 
-application in OAuth2 server. (```oauth2.client.secret```)
+application in OAuth2 server. (`oauth2.client.secret`)
 * **Scope**: The value of the scope parameter is expressed as a list of 
 space-delimited, case-sensitive strings. The strings are defined by the OAuth2 
-server. (```oauth2.scope```)
+server. (`oauth2.scope`)
 * **Authorization Endpoint**: The authorization endpoint of OAuth2 server. 
-(```oauth2.authorization.endpoint```)
+(`oauth2.authorization.endpoint`)
 * **Token Endpoint**: The token endpoint of OAuth2 server. 
-(```oauth2.token.endpoint```)
+(`oauth2.token.endpoint`)
 * **User Information Request URL**: The URL of the OAuth2 server that provides 
 information from the user. This URL is used to query the user ID on the OAuth2 
-Server side. (```oauth2.user.information.request.url```)
+Server side. (`oauth2.user.information.request.url`)
 * **Property Manager**: OSGi Service filter expression for 
-```org.everit.osgi.props.PropertyManager```. (```propertyManager.target```)
+`org.everit.osgi.props.PropertyManager`. (`propertyManager.target`)
 * **Resource Service**: OSGi Service filter expression for 
-```org.everit.osgi.resource.ResourceService```. (```resourceService.target```)
+`org.everit.osgi.resource.ResourceService`. (`resourceService.target`)
 * **Querydsl Support**: OSGi Service filter expression for 
-```org.everit.osgi.querydsl.support.QuerydslSupport```. (```querydslSupport.target```)
+`org.everit.osgi.querydsl.support.QuerydslSupport`. (`querydslSupport.target`)
 * **Transaction Propagator**: OSGi Service filter expression for 
-```org.everit.transaction.propagator.TransactionPropagator```. (```transactionPropagator.target```)
+`org.everit.transaction.propagator.TransactionPropagator`. (`transactionPropagator.target`)
 
 ## Everit OAuth2 Session Attribute Names Component
 
 Session attribute names stored in and read from the 
-```javax.servlet.http.HttpSession``` during the authentication process. 
+`javax.servlet.http.HttpSession` during the authentication process. 
 These attribute names can be used to access the stored information 
 (access token, etc.) to be able to communicate with the OAuth2 server. 
 Registers an 
-```org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames``` OSGi 
+`org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames` OSGi 
 Service.
 
 ### Configuration
 
 * **Service Description**: The description of this component configuration. 
 It is used to easily identify the service registered by this component.
-(```service.description```)
+(`service.description`)
 * **Provider Name**: The session attribute name of the provider. 
-(```oauth2.session.attr.name.provider.name```)
+(`oauth2.session.attr.name.provider.name`)
 * **Access Token**: The session attribute name of the access token. 
-(```oauth2.session.attr.name.access.token```)
+(`oauth2.session.attr.name.access.token`)
 * **Access Token Type**: The session attribute name of the access token type. 
-(```oauth2.session.attr.name.access.token.type```)
+(`oauth2.session.attr.name.access.token.type`)
 * **Expires In**: The session attribute name of the access token expires in. 
-(```oauth2.session.attr.name.expires.in```)
+(`oauth2.session.attr.name.expires.in`)
 * **Refresh Token**: The session attribute name of the refresh token. 
-(```oauth2.session.attr.name.refresh.token```)
+(`oauth2.session.attr.name.refresh.token`)
 * **Scope**: The session attribute name of the scope. 
-(```oauth2.session.attr.name.scope```)
+(`oauth2.session.attr.name.scope`)
 
 ## Everit OAuth2 Authentication Servlet Component
 
 Implements OAuth2-based authentication mechanism as a Servlet. Registers a 
-```javax.servlet.Servlet``` OSGi Service.
+`javax.servlet.Servlet` OSGi Service.
 
 ### Configuration
 
 * **Service Description**: The description of this component configuration. 
 It is used to easily identify the service registered by this component.
-(```service.description```)
+(`service.description`)
 * **Provider Name**: The OAuth2 provider name. This value:
   * (1) is saved to the database when a user is authenticated;
   * (2) is stored in the session to be able to identify the current provider;
   * (3) can be used to filter and wire the OSGi services belonging to the same 
 provider, for e.g.: (oauth2.provider.name=google). 
-(```oauth2.provider.name```).
+(`oauth2.provider.name`).
 * **Success URL**: The URL where the user will be redirected in case of a 
-successful authentication. (```oauth2.authentication.success.url```)
+successful authentication. (`oauth2.authentication.success.url`)
 * **Failed URL**: The URL where the user will be redirected in case of a 
-failed authentication. (```oauth2.authentication.failed.url```)
+failed authentication. (`oauth2.authentication.failed.url`)
 * **Request Token Path Info**: The path info of this servlet that is used to 
 create the redirect URL for the OAuth2 server, see below. 
-(```oauth2.process.request.token.path.info```)
+(`oauth2.process.request.token.path.info`)
 * **OAuth2 Session Attribute Names**: OSGi Service filter expression for 
-```org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames```. 
-(```oauth2SessionAttributeNames.target```)
+`org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames`. 
+(`oauth2SessionAttributeNames.target`)
 * **OAuth2 Communicator**: OSGi Service filter expression for 
-```org.everit.authentication.oauth2.OAuth2Communicator```. 
-(```oauth2Communicator.target```)
+`org.everit.authentication.oauth2.OAuth2Communicator`. 
+(`oauth2Communicator.target`)
 * **Authentication Session Attribute Names**: OSGi Service filter expression 
-for ```org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames```. 
-(```authenticationSessionAttributeNames.target```)
+for `org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames`. 
+(`authenticationSessionAttributeNames.target`)
 * **Resource Id Resolver**: OSGi Service filter expression for 
-```org.everit.osgi.resource.resolver.ResourceIdResolver```. 
-(```resourceIdResolver.target```)
+`org.everit.osgi.resource.resolver.ResourceIdResolver`. 
+(`resourceIdResolver.target`)
 
 ## Everit Jetty ServletContextHandler Factory
 
@@ -175,11 +175,11 @@ application but it can be applied in any other application easily.
 These following Servlet and Filter clauses are used to register the Servlets 
 and Filters to the Servlet Context. The clauses are built from three part:
 * the identifier;
-* the ```url-pattern``` attribute describes where Servlet or Filter listens on;
-* the ```filter``` directive is used to determine which 
-```javax.servlet.Servlet``` or ```javax.servlet.Filter``` OSGi service should 
+* the `url-pattern` attribute describes where Servlet or Filter listens on;
+* the `filter` directive is used to determine which 
+`javax.servlet.Servlet` or `javax.servlet.Filter` OSGi service should 
 be registered to the Servlet Context to handle the request on the specified 
-```url-pattern```.
+`url-pattern`.
 
 ### Servlet Configuration
 
@@ -190,8 +190,8 @@ application.
 
 ##### index
 
-This configuration serves the content of the ```index.html``` page with the 
-```IndexServletComponent```. This is the login page where the 
+This configuration serves the content of the `index.html` page with the 
+`IndexServletComponent`. This is the login page where the 
 "Sign in with Google" and "Sign in with Facebook" buttons are.
 
 ```
@@ -200,8 +200,8 @@ index;url-pattern=/index;filter:=(objectClass=org.everit.authentication.oauth2.r
 
 ##### welcome
 
-This configuration serves the content of the ```welcome.html``` page with the 
-```WelcomeServletComponent```. The user is redirected to this page if the 
+This configuration serves the content of the `welcome.html` page with the 
+`WelcomeServletComponent`. The user is redirected to this page if the 
 authentication is successful. The welcome page (the Servlet) checks if the 
 user is authenticated, queries the name of the user from the OAuth2 server 
 and renders these information.
@@ -212,8 +212,8 @@ welcome;url-pattern=/welcome;filter:=(objectClass=org.everit.authentication.oaut
 
 ##### failed
 
-This configuration serves the content of the ```failed.html``` page with the 
-```FailedServletComponent```. This is the page where the user is redirected if 
+This configuration serves the content of the `failed.html` page with the 
+`FailedServletComponent`. This is the page where the user is redirected if 
 the authentication is failed.
 
 ```
@@ -222,12 +222,12 @@ failed;url-pattern=/failed;filter:=(objectClass=org.everit.authentication.oauth2
 
 #### OAuth2 servlets
 
-The ```OAuth2AuthenticationServlet``` is responsible for the communication 
+The `OAuth2AuthenticationServlet` is responsible for the communication 
 between:
 * the user (the browser) and the application;
 * the application and the OAuth2 server.
 
-It handles the ```sign-in-with-...``` requests of the user and redirects the 
+It handles the `sign-in-with-...` requests of the user and redirects the 
 user to the OAuth2 server. It also acquires the access token when the user 
 grants the application.
 
@@ -282,10 +282,10 @@ logout;url-pattern=/logout;filter:=(service.pid=org.everit.osgi.authentication.h
 
 This filter is applied on all (/*) requests received by the Jetty Connector. 
 It determines if there is an authenticated resource Id (that were added by 
-the ```OAuth2AuthenticationServlet``` previously) is assigned to the current 
+the `OAuth2AuthenticationServlet` previously) is assigned to the current 
 session and executes the authenticated action 
-(```chain.doFilter(request, response);```) in the name of it. Using this 
-filter the ```AuthenticationContext.getCurrentResourceId()``` will return 
+(`chain.doFilter(request, response);`) in the name of it. Using this 
+filter the `AuthenticationContext.getCurrentResourceId()` will return 
 the resource Id assigned to the logged in user.
 
 ```
