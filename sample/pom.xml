@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     Copyright (C) 2011 Everit Kft. (http://www.everit.org)
@@ -14,12 +13,13 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.everit.authentication</groupId>
     <artifactId>org.everit.authentication.oauth2.ri.ecm.parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
   </parent>
 
   <groupId>org.everit.authentication</groupId>
@@ -86,7 +86,7 @@
       <plugin>
         <groupId>org.everit.osgi.dev</groupId>
         <artifactId>eosgi-maven-plugin</artifactId>
-        <version>3.2.0</version>
+        <version>3.3.3</version>
         <configuration>
           <environments>
             <environment>
@@ -111,27 +111,47 @@
   </build>
 
   <dependencies>
+
     <dependency>
       <groupId>org.everit.authentication</groupId>
       <artifactId>org.everit.authentication.oauth2.ri.ecm</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.cache.noop</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.resource.ri</artifactId>
+      <groupId>org.everit.authentication</groupId>
+      <artifactId>org.everit.authentication.http.session.ecm</artifactId>
       <version>1.0.0</version>
     </dependency>
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.authentication.context.ri</artifactId>
-      <version>1.1.0</version>
+      <groupId>org.everit.resource</groupId>
+      <artifactId>org.everit.resource.ri.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.cache</groupId>
+      <artifactId>org.everit.cache.noop.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.transaction</groupId>
+      <artifactId>org.everit.transaction.propagator.jta.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.props</groupId>
+      <artifactId>org.everit.props.ri.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.authentication</groupId>
+      <artifactId>org.everit.authentication.context.ri.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.web</groupId>
+      <artifactId>org.everit.web.servlet</artifactId>
+      <version>1.0.0</version>
     </dependency>
 
     <dependency>
@@ -141,10 +161,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <version>4.3.1</version>
-      <scope>provided</scope>
+      <groupId>org.everit.osgi.dev</groupId>
+      <artifactId>org.everit.osgi.dev.testrunner.junit4</artifactId>
+      <version>3.0.5</version>
     </dependency>
 
     <dependency>
@@ -159,18 +178,13 @@
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.scr</artifactId>
-      <version>1.8.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.metatype</artifactId>
-      <version>1.0.10</version>
+      <version>1.1.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.eventadmin</artifactId>
-      <version>1.4.2</version>
+      <artifactId>org.apache.felix.configadmin</artifactId>
+      <version>1.8.8</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -187,12 +201,13 @@
       <artifactId>org.everit.osgi.loglistener.slf4j</artifactId>
       <version>1.0.0</version>
     </dependency>
+
     <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.configadmin</artifactId>
-      <version>1.8.0</version>
+      <groupId>org.ow2.spec.osgi</groupId>
+      <artifactId>ow2-httpservice-1.2-spec</artifactId>
+      <version>1.0.0</version>
     </dependency>
-    
+
     <!-- Transaction manager -->
     <dependency>
       <groupId>org.apache.aries.transaction</groupId>
@@ -209,27 +224,24 @@
       <artifactId>org.everit.osgi.bundles.javax.sql</artifactId>
       <version>4.1.0</version>
     </dependency>
-
+    
     <!-- Jetty with Http Service -->
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.jetty.boot</artifactId>
-      <version>1.0.2</version>
+      <groupId>org.everit.jetty</groupId>
+      <artifactId>org.everit.jetty.osgi.boot</artifactId>
+      <version>1.0.0</version>
     </dependency>
-
-    <!-- ECM based Jetty Components -->
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.jetty.server.component</artifactId>
-      <version>1.1.0</version>
+      <groupId>org.everit.jetty</groupId>
+      <artifactId>org.everit.jetty.server.ecm</artifactId>
+      <version>1.0.0</version>
     </dependency>
-
-
+     
     <!-- Felix webconsole with dependencies -->
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.webconsole</artifactId>
-      <version>4.2.8</version>
+      <version>4.2.14</version>
     </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
@@ -237,79 +249,58 @@
       <version>1.3.1</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.webconsole.plugins.ds</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.everit.osgi.bundles</groupId>
       <artifactId>org.everit.osgi.bundles.org.json</artifactId>
       <version>1.0.0-v20140107</version>
     </dependency>
+
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.transaction.helper</artifactId>
-      <version>2.0.1</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>org.apache.felix.scr.annotations</artifactId>
-          <groupId>org.apache.felix</groupId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.apache.felix</groupId>
+      <artifactId>org.apache.felix.http.base</artifactId>
+      <version>2.3.0</version>
     </dependency>
-    <dependency>
-      <groupId>org.everit.transaction</groupId>
-      <artifactId>org.everit.transaction.propagator.jta.ecm</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-    </dependency>
-    
-    <!-- Database related modules -->
-    <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.liquibase.datasource</artifactId>
-      <version>1.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.liquibase.bundle</artifactId>
-      <version>3.1.1-v20140507</version>
-    </dependency>
-    <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.jdbc.dsf</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.jdbc.commons.dbcp</artifactId>
-      <version>2.0.1</version>
-    </dependency>
+
+    <!-- Database -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>1.4.187</version>
     </dependency>
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.jtds.component</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.ow2.spec.osgi</groupId>
       <artifactId>ow2-jdbc-service-1.0-spec</artifactId>
       <version>1.0.13</version>
     </dependency>
+    <dependency>
+      <groupId>org.everit.persistence</groupId>
+      <artifactId>org.everit.persistence.jdbc.dsf.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.persistence</groupId>
+      <artifactId>org.everit.persistence.jdbc.commons.dbcp.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.persistence</groupId>
+      <artifactId>org.everit.persistence.liquibase.datasource.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
 
     <!-- Dependencies needed by QueryDSL -->
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.querydsl.templates</artifactId>
-      <version>1.0.1</version>
+      <groupId>org.everit.persistence</groupId>
+      <artifactId>org.everit.persistence.querydsl.sqltemplates.ecm</artifactId>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
-      <groupId>org.everit.osgi</groupId>
-      <artifactId>org.everit.osgi.querydsl.configuration</artifactId>
+      <groupId>org.everit.persistence</groupId>
+      <artifactId>org.everit.persistence.querydsl.configuration.ecm</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.everit.persistence</groupId>
+      <artifactId>org.everit.persistence.querydsl.support.ri.ecm</artifactId>
       <version>1.0.0</version>
     </dependency>
     <dependency>
@@ -322,28 +313,24 @@
       <artifactId>org.apache.servicemix.bundles.javax-inject</artifactId>
       <version>1_2</version>
     </dependency>
-    <dependency>
-      <groupId>com.mysema.querydsl</groupId>
-      <artifactId>querydsl-sql</artifactId>
-      <version>3.6.0</version>
-    </dependency>
 
     <!-- ECM -->
     <dependency>
       <groupId>org.everit.osgi</groupId>
       <artifactId>org.everit.osgi.ecm.extender.ri</artifactId>
-      <version>1.0.0</version>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.everit.osgi</groupId>
       <artifactId>org.everit.osgi.ecm.component.ri</artifactId>
-      <version>1.3.0</version>
+      <version>2.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.everit.osgi</groupId>
       <artifactId>org.everit.osgi.ecm.component.webconsole</artifactId>
-      <version>1.0.0</version>
+      <version>1.1.0</version>
     </dependency>
+
   </dependencies>
 
 </project>

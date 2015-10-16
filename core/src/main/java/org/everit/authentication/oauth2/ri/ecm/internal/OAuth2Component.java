@@ -15,11 +15,9 @@
  */
 package org.everit.authentication.oauth2.ri.ecm.internal;
 
-import java.util.Optional;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.everit.authentication.oauth2.AccessTokenResponse;
 import org.everit.authentication.oauth2.OAuth2Communicator;
 import org.everit.authentication.oauth2.ri.core.OAuth2OltuCommunicatorImpl;
 import org.everit.authentication.oauth2.ri.core.OAuth2ResourceIdResolverImpl;
@@ -27,17 +25,20 @@ import org.everit.authentication.oauth2.ri.ecm.OAuth2Constants;
 import org.everit.osgi.ecm.annotation.Activate;
 import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
-import org.everit.osgi.ecm.annotation.Service;
+import org.everit.osgi.ecm.annotation.Deactivate;
+import org.everit.osgi.ecm.annotation.ManualService;
 import org.everit.osgi.ecm.annotation.ServiceRef;
 import org.everit.osgi.ecm.annotation.attribute.StringAttribute;
 import org.everit.osgi.ecm.annotation.attribute.StringAttributes;
+import org.everit.osgi.ecm.component.ComponentContext;
 import org.everit.osgi.ecm.extender.ECMExtenderConstants;
-import org.everit.osgi.props.PropertyManager;
-import org.everit.osgi.querydsl.support.QuerydslSupport;
-import org.everit.osgi.resource.ResourceService;
-import org.everit.osgi.resource.resolver.ResourceIdResolver;
+import org.everit.persistence.querydsl.support.QuerydslSupport;
+import org.everit.props.PropertyManager;
+import org.everit.resource.ResourceService;
+import org.everit.resource.resolver.ResourceIdResolver;
 import org.everit.transaction.propagator.TransactionPropagator;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
 
 import aQute.bnd.annotation.headers.ProvideCapability;
 
@@ -46,14 +47,46 @@ import aQute.bnd.annotation.headers.ProvideCapability;
  */
 @Component(
     componentId = OAuth2Constants.SERVICE_FACTORYPID_OAUTH2,
-    configurationPolicy = ConfigurationPolicy.FACTORY)
+    configurationPolicy = ConfigurationPolicy.FACTORY,
+    label = "Everit OAuth2 Component",
+    description = "Responsible for OAuth2 communication and resource id handling. Registers an "
+        + "org.everit.authentication.oauth2.OAuth2Communicator and an "
+        + "org.everit.osgi.resource.resolver.ResourceIdResolver OSGi Services.")
 @ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
     value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
-        defaultValue = OAuth2Constants.DEFAULT_SERVICE_DESCRIPTION) })
-@Service
-public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
+        defaultValue = OAuth2Constants.DEFAULT_SERVICE_DESCRIPTION,
+        priority = OAuth2Component.P01_SERVICE_DESCRIPTION,
+        label = "Service Description",
+        description = "The description of this component configuration. It is used to easily "
+            + "identify the service registered by this component.") })
+@ManualService({ OAuth2Communicator.class, ResourceIdResolver.class })
+public class OAuth2Component {
+
+  public static final int P01_SERVICE_DESCRIPTION = 1;
+
+  public static final int P02_PROVIDER_NAME = 2;
+
+  public static final int P03_CLIENT_ID = 3;
+
+  public static final int P04_CLIENT_SECRET = 4;
+
+  public static final int P05_TOKEN_ENDPOINT = 5;
+
+  public static final int P06_AUTHORITZATION_ENDPOINT = 6;
+
+  public static final int P07_SCOPE = 7;
+
+  public static final int P08_USER_INFORMATION_REQUEST_URL = 8;
+
+  public static final int P09_RESOURCE_SERVICE = 9;
+
+  public static final int P10_PROPERTY_MANAGER = 10;
+
+  public static final int P11_QUERYDSL_SUPPORT = 11;
+
+  public static final int P12_TRANSACTION_PROPAGATOR = 12;
 
   private String authorizationEndpoint;
 
@@ -61,7 +94,7 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
 
   private String clientSecret;
 
-  private OAuth2Communicator oAuth2Communicator;
+  private ServiceRegistration<OAuth2Communicator> oAuth2CommunicatorSR;
 
   private PropertyManager propertyManager;
 
@@ -69,7 +102,7 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
 
   private QuerydslSupport querydslSupport;
 
-  private ResourceIdResolver resourceIdResolver;
+  private ServiceRegistration<ResourceIdResolver> resourceIdResolverSR;
 
   private ResourceService resourceService;
 
@@ -83,99 +116,135 @@ public class OAuth2Component implements OAuth2Communicator, ResourceIdResolver {
 
   /**
    * Component activator method that instantiates the wrapped {@link ResourceIdResolver} and
-   * {@link OAuth2Communicator}.
+   * {@link OAuth2Communicator} and registers them as OSGi services.
    */
   @Activate
-  public void activate() {
-    resourceIdResolver = new OAuth2ResourceIdResolverImpl(
+  public void activate(final ComponentContext<OAuth2Component> componentContext) {
+    Dictionary<String, Object> properties =
+        new Hashtable<>(componentContext.getProperties());
+
+    ResourceIdResolver resourceIdResolver = new OAuth2ResourceIdResolverImpl(
         providerName, propertyManager, resourceService, transactionPropagator, querydslSupport);
 
-    oAuth2Communicator =
+    OAuth2Communicator oAuth2Communicator =
         new OAuth2OltuCommunicatorImpl(providerName, clientId, clientSecret, authorizationEndpoint,
             tokenEndpoint, scope, userInformationRequestURL);
+
+    resourceIdResolverSR = componentContext.registerService(
+        ResourceIdResolver.class, resourceIdResolver, properties);
+    oAuth2CommunicatorSR = componentContext.registerService(
+        OAuth2Communicator.class, oAuth2Communicator, properties);
   }
 
-  @Override
-  public String buildAuthorizationURL(final String redirectURL) {
-    return oAuth2Communicator.buildAuthorizationURL(redirectURL);
+  /**
+   * Component deactivate method that unregisters the OSGi services.
+   */
+  @Deactivate
+  public void deactivate() {
+    if (resourceIdResolverSR != null) {
+      resourceIdResolverSR.unregister();
+    }
+    if (oAuth2CommunicatorSR != null) {
+      oAuth2CommunicatorSR.unregister();
+    }
   }
 
-  @Override
-  public Optional<AccessTokenResponse> getAccessToken(final HttpServletRequest req,
-      final String redirectUri) {
-    return oAuth2Communicator.getAccessToken(req, redirectUri);
-  }
-
-  @Override
-  public String getProviderName() {
-    return oAuth2Communicator.getProviderName();
-  }
-
-  @Override
-  public Optional<Long> getResourceId(final String uniqueIdentifier) {
-    return resourceIdResolver.getResourceId(uniqueIdentifier);
-  }
-
-  @Override
-  public Optional<String> getUniqueUserId(final AccessTokenResponse accessTokenResponse) {
-    return oAuth2Communicator.getUniqueUserId(accessTokenResponse);
-  }
-
-  @StringAttribute(attributeId = OAuth2Constants.ATTR_AUTHORITZATION_ENDPOINT)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_AUTHORITZATION_ENDPOINT,
+      priority = P06_AUTHORITZATION_ENDPOINT,
+      label = "Authorization Endpoint",
+      description = "The authorization endpoint of OAuth2 server.")
   public void setAuthorizationEndpoint(final String authorizationEndpoint) {
     this.authorizationEndpoint = authorizationEndpoint;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.ATTR_CLIENT_ID)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_CLIENT_ID,
+      priority = P03_CLIENT_ID,
+      label = "Client Id",
+      description = "The client Id of the registered client application in OAuth2 server.")
   public void setClientId(final String clientId) {
     this.clientId = clientId;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.ATTR_CLIENT_SECRET)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_CLIENT_SECRET,
+      priority = P04_CLIENT_SECRET,
+      label = "Client Secret",
+      description = "The client secret of the registered client application in OAuth2 server.")
   public void setClientSecret(final String clientSecret) {
     this.clientSecret = clientSecret;
   }
 
   @ServiceRef(attributeId = OAuth2Constants.ATTR_PROPERTY_MANAGER,
-      defaultValue = "")
+      defaultValue = "",
+      attributePriority = P10_PROPERTY_MANAGER,
+      label = "Property Manager",
+      description = "OSGi Service filter expression for org.everit.osgi.props.PropertyManager.")
   public void setPropertyManager(final PropertyManager propertyManager) {
     this.propertyManager = propertyManager;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.ATTR_PROVIDER_NAME)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_PROVIDER_NAME,
+      priority = P02_PROVIDER_NAME,
+      label = "Provider Name",
+      description = "The OAuth2 provider name. This value: "
+          + "(1) is saved to the database when a user is authenticated; "
+          + "(2) is stored in the session to be able to identify the current provider; "
+          + "(3) can be used to filter and wire the OSGi services belonging to the same provider, "
+          + "for e.g.: (oauth2.provider.name=google).")
   public void setProviderName(final String providerName) {
     this.providerName = providerName;
   }
 
   @ServiceRef(attributeId = OAuth2Constants.ATTR_QUERYDSL_SUPPORT,
-      defaultValue = "")
+      defaultValue = "",
+      attributePriority = P11_QUERYDSL_SUPPORT,
+      label = "Querydsl Support",
+      description = "OSGi Service filter expression for "
+          + "org.everit.osgi.querydsl.support.QuerydslSupport.")
   public void setQuerydslSupport(final QuerydslSupport querydslSupport) {
     this.querydslSupport = querydslSupport;
   }
 
   @ServiceRef(attributeId = OAuth2Constants.ATTR_RESOURCE_SERVICE,
-      defaultValue = "")
+      defaultValue = "",
+      attributePriority = P09_RESOURCE_SERVICE,
+      label = "Resource Service",
+      description = "OSGi Service filter expression for org.everit.osgi.resource.ResourceService.")
   public void setResourceService(final ResourceService resourceService) {
     this.resourceService = resourceService;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.ATTR_SCOPE)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_SCOPE,
+      priority = P07_SCOPE,
+      label = "Scope",
+      description = "The value of the scope parameter is expressed as a list of space-delimited, "
+          + "case-sensitive strings. The strings are defined by the OAuth2 server.")
   public void setScope(final String scope) {
     this.scope = scope;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.ATTR_TOKEN_ENDPOINT)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_TOKEN_ENDPOINT,
+      priority = P05_TOKEN_ENDPOINT,
+      label = "Token Endpoint",
+      description = "The token endpoint of OAuth2 server.")
   public void setTokenEndpoint(final String tokenEndpoint) {
     this.tokenEndpoint = tokenEndpoint;
   }
 
   @ServiceRef(attributeId = OAuth2Constants.ATTR_TRANSACTION_PROPAGATOR,
-      defaultValue = "")
+      defaultValue = "",
+      attributePriority = P12_TRANSACTION_PROPAGATOR,
+      label = "Transaction Propagator",
+      description = "OSGi Service filter expression for "
+          + "org.everit.transaction.propagator.TransactionPropagator.")
   public void setTransactionPropagator(final TransactionPropagator transactionPropagator) {
     this.transactionPropagator = transactionPropagator;
   }
 
-  @StringAttribute(attributeId = OAuth2Constants.ATTR_USER_INFORMATION_REQUEST_URL)
+  @StringAttribute(attributeId = OAuth2Constants.ATTR_USER_INFORMATION_REQUEST_URL,
+      priority = P08_USER_INFORMATION_REQUEST_URL,
+      label = "User Information Request URL",
+      description = "The URL of the OAuth2 server that provides information from the user. This "
+          + "URL is used to query the user ID on the OAuth2 Server side.")
   public void setUserInformationRequestURL(final String userInformationRequestURL) {
     this.userInformationRequestURL = userInformationRequestURL;
   }

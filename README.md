@@ -44,12 +44,12 @@ client registrations and the application start. The `client id` and
 * Replace the `MY_GOOGLE_CLIENT_ID` and `MY_GOOGLE_CLIENT_SECRET` 
 values with the `client id` and `client secret` obtained from 
 Google on the OAuth2 Component configuration belonging to the google provider: 
-`https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.cfb8ede0-f72b-4106-a100-f18087606aff`
+`https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.1cf48e83-2ac5-4948-a5da-233337f5a43a`
 * Replace the `MY_FACEBOOK_CLIENT_ID` and `MY_FACEBOOK_CLIENT_SECRET` 
 values with `client id` and `client secret` obtained from 
 Facebook on the OAuth2 Component configuration belonging to the facebook 
 provider:
-`https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.c7fb1164-ae00-45dd-af3c-556a6c440f78`
+`https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.eac0369c-3316-46e8-aae1-9da677844ebb`
 
 After the successful configuration the sample application can be accessed on 
 `https://localhost:8443/index`.
@@ -59,11 +59,14 @@ setup.
 
 # Configurable Components
 
+The following OSGi components can be configured via config admin on web 
+console: `https://localhost:4848/system/console/configMgr`
+
 ## Everit OAuth2 Component
 
 Responsible for OAuth2 communication and resource id handling. Registers an 
 `org.everit.authentication.oauth2.OAuth2Communicator` and an 
-`org.everit.osgi.resource.resolver.ResourceIdResolver` OSGi Services.
+`org.everit.resource.resolver.ResourceIdResolver` OSGi Services.
 
 ### Configuration
 
@@ -91,11 +94,11 @@ server. (`oauth2.scope`)
 information from the user. This URL is used to query the user ID on the OAuth2 
 Server side. (`oauth2.user.information.request.url`)
 * **Property Manager**: OSGi Service filter expression for 
-`org.everit.osgi.props.PropertyManager`. (`propertyManager.target`)
+`org.everit.props.PropertyManager`. (`propertyManager.target`)
 * **Resource Service**: OSGi Service filter expression for 
-`org.everit.osgi.resource.ResourceService`. (`resourceService.target`)
+`org.everit.resource.ResourceService`. (`resourceService.target`)
 * **Querydsl Support**: OSGi Service filter expression for 
-`org.everit.osgi.querydsl.support.QuerydslSupport`. (`querydslSupport.target`)
+`org.everit.querydsl.support.QuerydslSupport`. (`querydslSupport.target`)
 * **Transaction Propagator**: OSGi Service filter expression for 
 `org.everit.transaction.propagator.TransactionPropagator`. (`transactionPropagator.target`)
 
@@ -158,10 +161,10 @@ create the redirect URL for the OAuth2 server, see
 `org.everit.authentication.oauth2.OAuth2Communicator`. 
 (`oauth2Communicator.target`)
 * **Authentication Session Attribute Names**: OSGi Service filter expression 
-for `org.everit.osgi.authentication.http.session.AuthenticationSessionAttributeNames`. 
+for `org.everit.authentication.http.session.AuthenticationSessionAttributeNames`. 
 (`authenticationSessionAttributeNames.target`)
 * **Resource Id Resolver**: OSGi Service filter expression for 
-`org.everit.osgi.resource.resolver.ResourceIdResolver`. 
+`org.everit.resource.resolver.ResourceIdResolver`. 
 (`resourceIdResolver.target`)
 
 ## Everit Jetty ServletContextHandler Factory
@@ -174,7 +177,7 @@ easily.
 
 The configuration of the Jetty ServletContextHandler Factory can be accessed 
 on: 
-`https://localhost:4848/system/console/configMgr/org.everit.osgi.jetty.server.component.ServletContextHandlerFactory.a19c3b13-96fe-4df5-b4b1-b47ee2b2f7bf`
+`https://localhost:4848/system/console/configMgr/org.everit.jetty.server.ecm.ServletContextHandlerFactory.79b84f6b-83a2-4971-98ba-61b5eeb5398f`
 
 Servlet and Filter clauses are used to register the Servlets and Filters to 
 the Servlet Context. These clauses are built from three part:
@@ -288,7 +291,7 @@ logout button. It only invalidates the session of the user, it DOES NOT logs
 out the user on the OAuth2 server.
 
 ```
-logout;url-pattern=/logout;filter:=(service.pid=org.everit.osgi.authentication.http.session.SessionAuthentication.18d78085-28e4-4b8b-990d-4ac424a585d0)
+logout;url-pattern=/logout;filter:=(service.pid=org.everit.authentication.http.session.SessionAuthentication.1101452a-0f73-4789-bd35-48a47e586e2f)
 ```
 
 ### Filter Configuration
@@ -304,7 +307,7 @@ filter the `AuthenticationContext.getCurrentResourceId()` will return
 the resource Id assigned to the logged in user later on the stack.
 
 ```
-session-filter;url-pattern=/*;filter:=(service.pid=org.everit.osgi.authentication.http.session.SessionAuthentication.18d78085-28e4-4b8b-990d-4ac424a585d0)
+session-filter;url-pattern=/*;filter:=(service.pid=org.everit.authentication.http.session.SessionAuthentication.1101452a-0f73-4789-bd35-48a47e586e2f)
 ```
 
 # Wiring
