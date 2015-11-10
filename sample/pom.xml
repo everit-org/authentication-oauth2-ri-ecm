@@ -24,7 +24,7 @@
 
   <groupId>org.everit.authentication</groupId>
   <artifactId>org.everit.authentication.oauth2.ri.ecm.sample</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0-SNAPSHOT</version>
 
   <packaging>bundle</packaging>
 
@@ -126,7 +126,7 @@
     <dependency>
       <groupId>org.everit.resource</groupId>
       <artifactId>org.everit.resource.ri.ecm</artifactId>
-      <version>1.0.0</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.everit.cache</groupId>
@@ -141,7 +141,7 @@
     <dependency>
       <groupId>org.everit.props</groupId>
       <artifactId>org.everit.props.ri.ecm</artifactId>
-      <version>1.0.0</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.everit.authentication</groupId>
@@ -284,24 +284,14 @@
     <dependency>
       <groupId>org.everit.persistence</groupId>
       <artifactId>org.everit.persistence.liquibase.datasource.ecm</artifactId>
-      <version>1.0.0</version>
+      <version>2.0.0-SNAPSHOT</version>
     </dependency>
 
     <!-- Dependencies needed by QueryDSL -->
     <dependency>
       <groupId>org.everit.persistence</groupId>
-      <artifactId>org.everit.persistence.querydsl.sqltemplates.ecm</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.everit.persistence</groupId>
-      <artifactId>org.everit.persistence.querydsl.configuration.ecm</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.everit.persistence</groupId>
-      <artifactId>org.everit.persistence.querydsl.support.ri.ecm</artifactId>
-      <version>1.0.0</version>
+      <artifactId>org.everit.persistence.querydsl.ecm</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
