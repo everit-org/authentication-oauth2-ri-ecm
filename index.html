@@ -1,0 +1,521 @@
+<!DOCTYPE HTML>
+<!--
+
+    Copyright (C) 2011 Everit Kft. (http://www.everit.org)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Authentication OAuth2 RI ECM</title>
+<link rel="icon" type="image/ico" href="http://www.everit.org/fonts/favicon.ico">
+
+<!--    <link rel="stylesheet" type="text/css" href="common/css/base.css">-->
+<link href="http://www.everit.org/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://www.everit.org/css/docs.min.css" rel="stylesheet">
+<link href="http://www.everit.org/css/everit.css" rel="stylesheet">
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push([ '_setAccount', 'UA-15041869-4' ]);
+  _gaq.push([ '_setDomainName', 'everit.org' ]);
+  _gaq.push([ '_trackPageview' ]);
+</script>
+</head>
+
+<body class="bs-docs-home" data-spy="scroll" data-target="#affix-nav">
+  <a class="sr-only" href="#content">Skip to main content</a>
+  <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+    <div class="container">
+      <div class="navbar-header">
+        <button class="navbar-toggle" type="button" data-toggle="collapse"
+          data-target=".bs-navbar-collapse">
+          <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span
+            class="icon-bar"></span> <span class="icon-bar"></span>
+        </button>
+        <a href="#" class="navbar-brand">Index</a>
+      </div>
+      <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+        <ul class="nav navbar-nav">
+          <li><a href="https://github.com/everit-org/authentication-oauth2-ri-ecm"
+            target="_blank">Source</a></li>
+          <li><a href="http://www.everit.org/" target="_blank">Community</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="http://www.everit.biz" target="_blank">Enterprise</a></li>
+          <li><a href="http://everitorg.wordpress.com/" target="_blank">Blog</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="bs-docs-masthead everit-header" id="content" role="main">
+    <div class="container">
+      <span class="bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline"> <img
+        class="logo" src="http://www.everit.org/fonts/sbz_e.svg" alt="E">
+      </span>
+      <p class="lead">Authentication OAuth2 RI ECM</p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="col-md-10">
+
+      <div class="bs-docs-featurette cookbook">
+        <h2 id="introduction" class="bs-docs-featurette-title">Introduction</h2>
+        <p>
+          The <i>authentication-oauth2</i> is an OAuth 2.0 client and an authentication solution
+          based on <a href="https://everitorg.wordpress.com/2014/07/31/everit-authentication">EverIT
+            Authentication</a>.
+        </p>
+        <p>The project is separated to three Git repositories to support different
+          implementations and easier usage:
+        <ul>
+          <li><a href="https://github.com/everit-org/authentication-oauth2-api">authentication-oauth2-api</a>:
+            API to be able to implement custom OAuth2 authentication logic or provider specific
+            solutions.</li>
+          <li><a href="https://github.com/everit-org/authentication-oauth2-ri">authentication-oauth2-ri</a>:
+            The reference implementation of the API with implementation specific API and database
+            schema. This implementation was tested with Google and Facebook.</li>
+          <li><a href="https://github.com/everit-org/authentication-oauth2-ri-ecm">authentication-oauth2-ri-ecm</a>:
+            <a href="http://www.everit.org/ecm/">ECM</a> based OSGi components of the reference
+            implementation and a sample application.</li>
+        </ul>
+        </p>
+      </div>
+      <hr class="featurette-divider">
+
+      <div class="bs-docs-featurette cookbook">
+        <h2 id="quick_start_guide" class="bs-docs-featurette-title">Quick Start Guide</h2>
+        <p>
+          The sample application is a pre-configured OSGi application based on EverIT solutions. The
+          sample application must be registered in <a
+            href="https://developers.google.com/identity/sign-in/web/devconsole-project">Google
+            Dev Console</a> and/or <a href="https://developers.facebook.com/docs/apps/register">Facebook
+            App Registration</a> to acquire the
+          <code>client id</code>
+          and
+          <code>client secret</code>
+          . During the client application registration the following redirect URLs must be set in
+          case of:
+        <ul>
+          <li>Google: <code>https://localhost:8443/sign-in-with-google/processRequestToken</code></li>
+          <li>Facebook: <code>https://localhost:8443/sign-in-with-facebook/processRequestToken</code></li>
+        </ul>
+        (These two URLs are constructed based on the configuration of the application and can be
+        changed, see below.)
+        </p>
+        <p>
+          To build and run the sample application the following commands must be executed on
+          <code>authentication-oauth2-ri-ecm</code>
+          :
+        <pre class="prettyprint">cd sample
+mvn clean eosgi:dist
+cd target/eosgi-dist/oauth2-sample-app/bin
+runConsole.bat (or ./runConsole.sh)</pre>
+        </p>
+        <p>
+          Some configurtaion must be changed on the OSGi Web Console (
+          <code>https://localhost:4848/system/console/configMgr</code>
+          ) after the successful client registrations and the application start. The
+          <code>client id</code>
+          and
+          <code>client secret</code>
+          must be configured in the Everit OAuth2 Component (
+          <code>org.everit.authentication.oauth2.ri.ecm.OAuth2</code>
+          ) components:
+        <ul>
+          <li>Replace the <code>MY_GOOGLE_CLIENT_ID</code> and <code>MY_GOOGLE_CLIENT_SECRET</code>
+            values with the <code>client id</code> and <code>client secret</code> obtained from
+            Google on the OAuth2 Component configuration belonging to the google provider: <code>https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.1cf48e83-2ac5-4948-a5da-233337f5a43a</code></li>
+          <li>Replace the <code>MY_FACEBOOK_CLIENT_ID</code> and <code>MY_FACEBOOK_CLIENT_SECRET</code>
+            values with <code>client id</code> and <code>client secret</code> obtained from Facebook
+            on the OAuth2 Component configuration belonging to the facebook provider: <code>https://localhost:4848/system/console/configMgr/org.everit.authentication.oauth2.ri.ecm.OAuth2.eac0369c-3316-46e8-aae1-9da677844ebb</code></li>
+        </ul>
+        </p>
+        <p>
+          After the successful configuration the sample application can be accessed on
+          <code>https://localhost:8443/index.</code>
+        </p>
+        <p>Continue reading for more information about detailed configuration and setup.</p>
+      </div>
+      <hr class="featurette-divider">
+
+      <div class="bs-docs-featurette cookbook">
+        <h2 id="configurable_components" class="bs-docs-featurette-title">Configurable
+          Components</h2>
+        <p>
+          The following OSGi components can be configured via config admin on web console:
+          <code>https://localhost:4848/system/console/configMgr</code>
+        </p>
+        <h3 id="everit_oauth2_component">Everit OAuth2 Component</h3>
+        <p>
+          Responsible for OAuth2 communication and resource id handling. Registers an
+          <code>org.everit.authentication.oauth2.OAuth2Communicator</code>
+          and an
+          <code>org.everit.resource.resolver.ResourceIdResolver</code>
+          OSGi Services.
+        </p>
+        <h4 id="everit_oauth2_component_configuration">Configuration</h4>
+        <ul>
+          <li><b>Service Description</b>: The description of this component configuration. It
+            is used to easily identify the service registered by this component. (<code>service.description</code>)</li>
+          <li><b>Provider Name</b>: The OAuth2 provider name. This value:
+            <ul>
+              <li>is saved to the database when a user is authenticated;</li>
+              <li>is stored in the session to be able to identify the current provider;</li>
+              <li>can be used to filter and wire the OSGi services belonging to the same
+                provider, for e.g.: (oauth2.provider.name=google).</li>
+            </ul> (<code>oauth2.provider.name</code>).</li>
+          <li><b>Client Id</b>: The client Id of the registered client application in OAuth2
+            server. (<code>oauth2.client.id</code>)</li>
+          <li><b>Client Secret</b>: The client secret of the registered client application in
+            OAuth2 server. (<code>oauth2.client.secret</code>)</li>
+          <li><b>Scope</b>: The value of the scope parameter is expressed as a list of
+            space-delimited, case-sensitive strings. The strings are defined by the OAuth2 server. (<code>oauth2.scope</code>)</li>
+          <li><b>Authorization Endpoint</b>: The authorization endpoint of OAuth2 server. (<code>oauth2.authorization.endpoint</code>)</li>
+          <li><b>Token Endpoint</b>: The token endpoint of OAuth2 server. (<code>oauth2.token.endpoint</code>)</li>
+          <li><b>User Information Request URL</b>: The URL of the OAuth2 server that provides
+            information from the user. This URL is used to query the user ID on the OAuth2 Server
+            side. (<code>oauth2.user.information.request.url</code>)</li>
+          <li><b>Property Manager</b>: OSGi Service filter expression for <code>org.everit.props.PropertyManager</code>.
+            (<code>propertyManager.target</code>)</li>
+          <li><b>Resource Service</b>: OSGi Service filter expression for <code>org.everit.resource.ResourceService</code>.
+            (<code>resourceService.target</code>)</li>
+          <li><b>Querydsl Support</b>: OSGi Service filter expression for <code>org.everit.querydsl.support.QuerydslSupport</code>.
+            (<code>querydslSupport.target</code>)</li>
+          <li><b>Transaction Propagator</b>: OSGi Service filter expression for <code>org.everit.transaction.propagator.TransactionPropagator</code>.
+            (<code>transactionPropagator.target</code>)</li>
+        </ul>
+
+        <h3 id="everit_oauth2_session_attribute_names_component">Everit OAuth2 Session
+          Attribute Names Component</h3>
+        <p>
+          Session attribute names stored in and read from the
+          <code>javax.servlet.http.HttpSession</code>
+          during the authentication process. These attribute names can be used to access the stored
+          information (access token, etc.) to be able to communicate with the OAuth2 server.
+          Registers an
+          <code>org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames</code>
+          OSGi Service.
+        </p>
+        <h4 id="everit_oauth2_session_attribute_names_component_configuration">Configuration</h4>
+        <ul>
+          <li><b>Service Description</b>: The description of this component configuration. It
+            is used to easily identify the service registered by this component. (<code>service.description</code>)</li>
+          <li><b>Provider Name</b>: The session attribute name of the provider. (<code>oauth2.session.attr.name.provider.name</code>)</li>
+          <li><b>Access Token</b>: The session attribute name of the access token. (<code>oauth2.session.attr.name.access.token</code>)</li>
+          <li><b>Access Token Type</b>: The session attribute name of the access token type. (<code>oauth2.session.attr.name.access.token.type</code>)</li>
+          <li><b>Expires In</b>: The session attribute name of the access token expires in. (<b>oauth2.session.attr.name.expires.in</b>)</li>
+          <li><b>Refresh Token</b>: The session attribute name of the refresh token. (<code>oauth2.session.attr.name.refresh.token</code>)</li>
+          <li><b>Scope</b>: The session attribute name of the scope. (<code>oauth2.session.attr.name.scope</code>)</li>
+        </ul>
+
+        <h3 id="everit_oauth2_authentication_servlet_component">Everit OAuth2 Authentication
+          Servlet Component</h3>
+        <p>
+          Implements OAuth2-based authentication mechanism as a Servlet. Registers a
+          <code>javax.servlet.Servlet</code>
+          OSGi Service.
+        </p>
+        <h4 id="everit_oauth2_session_attribute_names_component_configuration">Configuration</h4>
+        <ul>
+          <li><b>Service Description</b>: The description of this component configuration. It
+            is used to easily identify the service registered by this component. (<code>service.description</code>)</li>
+          <li><b>Provider Name</b>: The OAuth2 provider name. This value:
+            <ul>
+              <li>is saved to the database when a user is authenticated;</li>
+              <li>is stored in the session to be able to identify the current provider;</li>
+              <li>can be used to filter and wire the OSGi services belonging to the same
+                provider, for e.g.: (oauth2.provider.name=google).</li>
+            </ul> (<code>oauth2.provider.name</code>).</li>
+          <li><b>Success URL</b>: The URL where the user will be redirected in case of a
+            successful authentication. (<code>oauth2.authentication.success.url</code>)</li>
+          <li><b>Failed URL</b>: The URL where the user will be redirected in case of a failed
+            authentication. (<code>oauth2.authentication.failed.url</code>)</li>
+          <li><b>Request Token Path Info</b>: The path info of this servlet that is used to
+            create the redirect URL for the OAuth2 server, see <a
+            href="https://www.everit.org/authentication-oauth2-ri-ecm/authentication-oauth2-ri-ecm#the_redirect_url">The
+              redirect URL section</a>. (<code>oauth2.process.request.token.path.info</code>)</li>
+          <li><b>OAuth2 Session Attribute Names</b>: OSGi Service filter expression for <code>org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames</code>.
+            (<code>oauth2SessionAttributeNames.target</code>)</li>
+          <li><b>OAuth2 Communicator</b>: OSGi Service filter expression for <code>org.everit.authentication.oauth2.OAuth2Communicator</code>.
+            (<code>oauth2Communicator.target</code>)</li>
+          <li><b>Authentication Session Attribute Names</b>: OSGi Service filter expression for
+            <cdode>org.everit.authentication.http.session.AuthenticationSessionAttributeNames</code>.
+            (<code>authenticationSessionAttributeNames.target</code>)</li>
+          <li><b>Resource Id Resolver</b>: OSGi Service filter expression for <code>org.everit.resource.resolver.ResourceIdResolver</code>.
+            (<code>resourceIdResolver.target</code>)</li>
+        </ul>
+
+        <h3 id="everit_jetty_servletContextHandler_factory">Everit Jetty ServletContextHandler
+          Factory</h3>
+        <p>
+          The Servlets and Filters used for OAuth2 authentication can be configured in Everit Jetty
+          ServletContextHandler Factory (provided by the <a
+            href="https://github.com/everit-org/jetty-server-ecm">jetty-server-ecm</a>). This
+          documentation explains the configuration of the sample application but it can be applied
+          in any other application easily.
+        </p>
+        <p>
+          The configuration of the Jetty ServletContextHandler Factory can be accessed on:
+          <code>https://localhost:4848/system/console/configMgr/org.everit.jetty.server.ecm.ServletContextHandlerFactory.79b84f6b-83a2-4971-98ba-61b5eeb5398f</code>
+        </p>
+        <p>Servlet and Filter clauses are used to register the Servlets and Filters to the
+          Servlet Context. These clauses are built from three part:
+        <ul>
+          <li>the identifier;</li>
+          <li>the <code>url-pattern</code> attribute describes where Servlet or Filter listens
+            on;
+          </li>
+          <li>the <code>filter</code> directive is used to determine which <code>javax.servlet.Servlet</code>
+            or <code>javax.servlet.Filter</code> OSGi service should be registered to the Servlet
+            Context to handle the request on the specified <code>url-pattern</code>.
+          </li>
+        </ul>
+        </p>
+        <h4 id="servlet_configuration">Servlet Configuration</h4>
+        <p>
+          The following <b>Servlets (clause)</b> configurations are used in the sample application.
+        </p>
+        <h5 id="sample_application_pages">Sample application pages</h5>
+        <h6>index</h6>
+        <p>
+          This configuration serves the content of the
+          <code>index.html</code>
+          page with the
+          <code>IndexServletComponent</code>
+          . This is the login page where the "Sign in with Google" and "Sign in with Facebook"
+          buttons are.
+        </p>
+        <pre style="" class="prettyprint">index;url-pattern=/index;filter:=(objectClass=org.everit.authentication.oauth2.ri.ecm.sample.IndexServletComponent)</pre>
+        <h6>welcome</h6>
+        <p>
+          This configuration serves the content of the
+          <code>welcome.html</code>
+          page with the
+          <code>WelcomeServletComponent</code>
+          . The user is redirected to this page if the authentication is successful. The welcome
+          page (the Servlet) checks if the user is authenticated, queries the name of the user from
+          the OAuth2 server and renders these information.
+        </p>
+        <pre style="" class="prettyprint">welcome;url-pattern=/welcome;filter:=(objectClass=org.everit.authentication.oauth2.ri.ecm.sample.WelcomeServletComponent)</pre>
+        <h6>failed</h6>
+        <p>
+          This configuration serves the content of the
+          <code>failed.html</code>
+          page with the
+          <code>FailedServletComponent</code>
+          . This is the page where the user is redirected if the authentication is failed.
+        </p>
+        <pre style="" class="prettyprint">failed;url-pattern=/failed;filter:=(objectClass=org.everit.authentication.oauth2.ri.ecm.sample.FailedServletComponent)</pre>
+        <h5 id="oauth2_servlets">OAuth2 servlets</h5>
+        <p>
+          The
+          <code>OAuth2AuthenticationServlet</code>
+          is responsible for the communication between:
+        <ul>
+          <li>the user (the browser) and the application;</li>
+          <li>the application and the OAuth2 server.</li>
+        </ul>
+        It handles the
+        <code>sign-in-with-...</code>
+        requests of the user and redirects the user to the OAuth2 server. It also acquires the
+        access token when the user grants the application that can be used later to access the
+        OAuth2 server in the name of the user.
+        </p>
+        <h6>sign-in-with-google</h6>
+        <p>This configuration is responsible for OAuth2 Google Authentication.</p>
+        <pre style="" class="prettyprint">sign-in-with-google;url-pattern=/sign-in-with-google/*;filter:=(oauth2.provider.name=google)</pre>
+        <h6>sign-in-with-facebook</h6>
+        <p>This configuration is responsible for OAuth2 Facebook Authentication.</p>
+        <pre style="" class="prettyprint">sign-in-with-facebook;url-pattern=/sign-in-with-facebook/*;filter:=(oauth2.provider.name=facebook)</pre>
+        <h6 id="#the_redirect_url">The redirect URL</h6>
+        <p>The redirect URL used in client registration and sent to the OAuth2 server is
+          constructed from the configuration of the application:
+        <pre style="" class="prettyprint">[PROTOCOL]://[HOST]:[PORT]/[SERVLET_URL_PATTERN]/[REQUEST_TOKEN_PATH_INFO]</pre>
+        <ul>
+          <li>PROTOCOL: the protocol used by the application (http/https)</li>
+          <li>HOST: the host of the application (localhost or a registered domain)</li>
+          <li>PORT: the port where the connections are received</li>
+          <li>SERVLET_URL_PATTERN: the URL where the OAuth2 Servlet is registered (see below:
+            /sign-in-with-google or /sign-in-with-facebook)</li>
+          <li>REQUEST_TOKEN_PATH_INFO: configured in the OAuth2 Authentication Servlet (see
+            above: /processRequestToken - by default)</li>
+        </ul>
+        </p>
+        <p>
+          For example in the sample application we configured the Jetty to use
+          <code>https</code>
+          protocol, on
+          <code>localhost:8443</code>
+          . The OAuth2 servlets are configured in the Servlet Context to listen on
+          <code>/sign-in-with-google/*</code>
+          and
+          <code>/sign-in-with-facebook/*</code>
+          . In the configuration of the OAuth2 Authentication Servlets we use the
+          <code>/processRequestToken</code>
+          request token path info. This is how the redirect URL is built. In case of google and
+          facebook providers, we have the following URLs:
+        <ul>
+          <li>Google: <code>https://localhost:8443/sign-in-with-google/processRequestToken</code></li>
+          <li>Facebook: <code>https://localhost:8443/sign-in-with-facebook/processRequestToken</code></li>
+        </ul>
+        </p>
+        <h5 id="session_authentication_servlet">Session Authentication Servlet</h5>
+        <h6>logout</h6>
+        <p>This configuration handles the logout requests, when the user clicks on the logout
+          button. It only invalidates the session of the user, it DOES NOT logs out the user on the
+          OAuth2 server.</p>
+        <pre style="" class="prettyprint">logout;url-pattern=/logout;filter:=(service.pid=org.everit.authentication.http.session.SessionAuthentication.1101452a-0f73-4789-bd35-48a47e586e2f)</pre>
+        <h4 id="filter_configuration">Filter Configuration</h4>
+        <h5 id="session_authentication_filter">Session Authentication Filter</h5>
+        <p>
+          This filter is applied on all (/*) requests received by the Jetty Connector. It determines
+          if there is an authenticated resource Id (that were added by the
+          <code>OAuth2AuthenticationServlet</code>
+          ) is assigned to the current session and executes the authenticated action (
+          <code>chain.doFilter(request, response);</code>
+          ) in the name of it. Using this filter the
+          <code>AuthenticationContext.getCurrentResourceId()</code>
+          will return the resource Id assigned to the logged in user later on the stack.
+        </p>
+        <pre style="" class="prettyprint">session-filter;url-pattern=/*;filter:=(service.pid=org.everit.authentication.http.session.SessionAuthentication.1101452a-0f73-4789-bd35-48a47e586e2f)</pre>
+      </div>
+      <hr class="featurette-divider">
+
+      <div class="bs-docs-featurette cookbook">
+        <h2 id="wiring" class="bs-docs-featurette-title">Wiring</h2>
+        <p>The following diagram demonstrates the component configuration where the boxes
+          represent the configured OSGi components and the arrows represent the registered OSGi
+          services.</p>
+        <img alt="" src="./img/oauth2-component-wiring.png" />
+      </div>
+      <hr class="featurette-divider">
+
+      <div class="bs-docs-featurette cookbook">
+        <h2 id="relation_with_everit_authentication" class="bs-docs-featurette-title">Relation
+          with Everit Authentication</h2>
+        <p>This solution matches the Everit Authentication Concept:
+        <ul>
+          <li>the user is authenticated;</li>
+          <li>the user Id is mapped to a resource Id;</li>
+          <li>the resource Id of the user is stored in the session;</li>
+          <li>the session belongs to the user and the resource Id can be read from the session
+            and can be used to execute authenticated actions.</li>
+        </ul>
+        </p>
+        <p>The OAuth2 components solves the following issues:
+        <ul>
+          <li>the <code>OAuth2AuthenticationServlet</code> manages the authentication process:
+            <ul>
+              <li>authenticates the user on the OAuth2 server</li>
+              <li>queries the user Id from the OAuth2 server</li>
+              <li>maps the user Id to a resource Id</li>
+              <li>stores the resource Id in the session based on <code>OAuth2SessionAttributeNames</code></li>
+            </ul>
+          </li>
+          <li>the <code>OAuth2OltuCommunicatorImpl</code> communicates with the OAuth2 server
+          </li>
+          <li>the <code>OAuth2ResourceIdResolverImpl</code> maps the user Id to a resource Id
+          </li>
+        </ul>
+        </p>
+      </div>
+      <hr class="featurette-divider">
+    </div>
+
+    <!--        Affix-->
+    <div class="col-md-2 col-sm-0 col-xs-0">
+      <nav id="affix-nav">
+        <ul class="nav nav-pills nav-stacked everit-affix" data-spy="affix" data-offset-top="350"
+          data-offset-bottom="140">
+          <li class="active"><a href="#introduction">Introduction</a></li>
+          <li><a href="#quick_start_guide">Quick Start Quide</a></li>
+          <li><a href="#configurable_components">Configurable Components</a>
+            <ul class="nav nav-pills nav-stacked">
+              <li><a href="#everit_oauth2_component">Everit OAuth2 Component</a></li>
+              <li><a href="#everit_oauth2_session_attribute_names_component">Everit OAuth2
+                  Session Attribute Names Component</a></li>
+              <li><a href="#everit_oauth2_authentication_servlet_component">Everit OAuth2
+                  Authentication Servlet Component</a></li>
+              <li><a href="#everit_jetty_servletContextHandler_factory">Everit Jetty
+                  ServletContextHandler Factory</a>
+                <ul class="nav nav-pills nav-stacked">
+                  <li><a href="#servlet_configuration">Servlet Configuration</a></li>
+                  <li><a href="#filter_configuration">Filter Configuration</a></li>
+                </ul></li>
+            </ul></li>
+          <li><a href="#wiring">Wiring</a></li>
+          <li><a href="#relation_with_everit_authentication">Relation with Everit
+              Authentication</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <div></div>
+  <footer class="bs-docs-footer" role="contentinfo">
+    <div class="container">
+      <div class="bs-docs-social">
+        <ul class="bs-docs-social-buttons">
+          <li class="follow-btn "><a href="https://twitter.com/EveritOrg"
+            class="twitter-follow-button" data-show-count="true">Follow @EveritOrg</a></li>
+          <li class="tweet-btn"><a href="https://twitter.com/share"
+            class="twitter-share-button" data-url="http://www.everit.org/">Tweet</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript
+================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="http://www.everit.org/js/jquery-2.1.1.min.js"></script>
+  <script src="http://www.everit.org/js/bootstrap.min.js"></script>
+  <script src="http://www.everit.org/js/everit.js "></script>
+  <script type="text/javascript">
+      (function() {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl'
+            : 'http://www')
+            + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  <style>
+<!--
+.bs-docs-featurette>h5 {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 16px;
+  font-style: oblique;
+}
+
+.bs-docs-featurette>h6 {
+  margin-top: 10px;
+  margin-bottom: 0px;
+  color: #555;
+  font-size: 14px;
+  font-style: italic;
+}
+-->
+</style>
+</body>
+
+</html>
