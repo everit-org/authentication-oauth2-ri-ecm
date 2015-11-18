@@ -48,8 +48,8 @@ import org.osgi.framework.BundleContext;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.mysema.query.Tuple;
-import com.mysema.query.sql.SQLQuery;
+import com.querydsl.core.Tuple;
+import com.querydsl.sql.SQLQuery;
 
 import aQute.bnd.annotation.headers.ProvideCapability;
 
@@ -170,13 +170,14 @@ public class WelcomeServletComponent extends AbstractServlet {
 
     return querydslSupport.execute((connection, configuration) -> {
 
-      return new SQLQuery(connection, configuration)
+      return new SQLQuery<Tuple>(connection, configuration)
+          .select(qoAuth2ResourceMapping.resourceId,
+              qoAuth2Provider.providerName,
+              qoAuth2ResourceMapping.providerUniqueUserId)
           .from(qoAuth2ResourceMapping)
           .innerJoin(qoAuth2ResourceMapping.fk.oauth2ResourceMappingProviderFk, qoAuth2Provider)
           .where(qoAuth2ResourceMapping.resourceId.eq(authenticatedResourceId))
-          .list(qoAuth2ResourceMapping.resourceId,
-              qoAuth2Provider.providerName,
-              qoAuth2ResourceMapping.providerUniqueUserId);
+          .fetch();
     });
   }
 
