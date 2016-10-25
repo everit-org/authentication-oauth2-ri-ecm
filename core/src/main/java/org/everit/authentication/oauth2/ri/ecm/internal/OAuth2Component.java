@@ -27,11 +27,12 @@ import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
 import org.everit.osgi.ecm.annotation.Deactivate;
 import org.everit.osgi.ecm.annotation.ManualService;
+import org.everit.osgi.ecm.annotation.ManualServices;
 import org.everit.osgi.ecm.annotation.ServiceRef;
 import org.everit.osgi.ecm.annotation.attribute.StringAttribute;
 import org.everit.osgi.ecm.annotation.attribute.StringAttributes;
 import org.everit.osgi.ecm.component.ComponentContext;
-import org.everit.osgi.ecm.extender.ECMExtenderConstants;
+import org.everit.osgi.ecm.extender.ExtendComponent;
 import org.everit.persistence.querydsl.support.QuerydslSupport;
 import org.everit.props.PropertyManager;
 import org.everit.resource.ResourceService;
@@ -40,11 +41,10 @@ import org.everit.transaction.propagator.TransactionPropagator;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 
-import aQute.bnd.annotation.headers.ProvideCapability;
-
 /**
  * ECM component for {@link OAuth2ResourceIdResolverImpl} and {@link OAuth2OltuCommunicatorImpl}.
  */
+@ExtendComponent
 @Component(
     componentId = OAuth2Constants.SERVICE_FACTORYPID_OAUTH2,
     configurationPolicy = ConfigurationPolicy.FACTORY,
@@ -52,8 +52,6 @@ import aQute.bnd.annotation.headers.ProvideCapability;
     description = "Responsible for OAuth2 communication and resource id handling. Registers an "
         + "org.everit.authentication.oauth2.OAuth2Communicator and an "
         + "org.everit.osgi.resource.resolver.ResourceIdResolver OSGi Services.")
-@ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
-    value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
         defaultValue = OAuth2Constants.DEFAULT_SERVICE_DESCRIPTION,
@@ -61,7 +59,8 @@ import aQute.bnd.annotation.headers.ProvideCapability;
         label = "Service Description",
         description = "The description of this component configuration. It is used to easily "
             + "identify the service registered by this component.") })
-@ManualService({ OAuth2Communicator.class, ResourceIdResolver.class })
+@ManualServices({ @ManualService(OAuth2Communicator.class),
+    @ManualService(ResourceIdResolver.class) })
 public class OAuth2Component {
 
   public static final int P01_SERVICE_DESCRIPTION = 1;

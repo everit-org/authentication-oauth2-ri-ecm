@@ -26,18 +26,18 @@ import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
 import org.everit.osgi.ecm.annotation.Deactivate;
 import org.everit.osgi.ecm.annotation.ManualService;
+import org.everit.osgi.ecm.annotation.ManualServices;
 import org.everit.osgi.ecm.annotation.attribute.StringAttribute;
 import org.everit.osgi.ecm.annotation.attribute.StringAttributes;
 import org.everit.osgi.ecm.component.ComponentContext;
-import org.everit.osgi.ecm.extender.ECMExtenderConstants;
+import org.everit.osgi.ecm.extender.ExtendComponent;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
-
-import aQute.bnd.annotation.headers.ProvideCapability;
 
 /**
  * ECM component for {@link OAuth2SessionAttributeNames} interface.
  */
+@ExtendComponent
 @Component(
     componentId = OAuth2SessionAttributeNamesConstants.SERVICE_FACTORYPID_OAUTH2_SESSION_ATTRIBUTE_NAMES, // CS_DISABLE_LINE_LENGTH
     configurationPolicy = ConfigurationPolicy.FACTORY,
@@ -48,8 +48,6 @@ import aQute.bnd.annotation.headers.ProvideCapability;
         + "(access token, etc.) to be able to communicate with the OAuth2 server. "
         + "Registers an org.everit.authentication.oauth2.ri.OAuth2SessionAttributeNames "
         + "OSGi Service.")
-@ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
-    value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
         defaultValue = OAuth2SessionAttributeNamesConstants.DEFAULT_SERVICE_DESCRIPTION,
@@ -57,7 +55,7 @@ import aQute.bnd.annotation.headers.ProvideCapability;
         label = "Service Description",
         description = "The description of this component configuration. It is used to easily "
             + "identify the service registered by this component.") })
-@ManualService(OAuth2SessionAttributeNames.class)
+@ManualServices(@ManualService(OAuth2SessionAttributeNames.class))
 public class OAuth2SessionAttributeNamesComponent {
 
   public static final int P01_SERVICE_DESCRIPTION = 1;

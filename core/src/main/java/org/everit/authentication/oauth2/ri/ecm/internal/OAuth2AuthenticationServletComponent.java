@@ -30,28 +30,26 @@ import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.ConfigurationPolicy;
 import org.everit.osgi.ecm.annotation.Deactivate;
 import org.everit.osgi.ecm.annotation.ManualService;
+import org.everit.osgi.ecm.annotation.ManualServices;
 import org.everit.osgi.ecm.annotation.ServiceRef;
 import org.everit.osgi.ecm.annotation.attribute.StringAttribute;
 import org.everit.osgi.ecm.annotation.attribute.StringAttributes;
 import org.everit.osgi.ecm.component.ComponentContext;
-import org.everit.osgi.ecm.extender.ECMExtenderConstants;
+import org.everit.osgi.ecm.extender.ExtendComponent;
 import org.everit.resource.resolver.ResourceIdResolver;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 
-import aQute.bnd.annotation.headers.ProvideCapability;
-
 /**
  * ECM component for {@link OAuth2AuthenticationServlet}.
  */
+@ExtendComponent
 @Component(
     componentId = OAuth2AuthenticationServletConstants.SERVICE_FACTORYPID_OAUTH2_AUTHENTICATION_SERVLET, // CS_DISABLE_LINE_LENGTH
     configurationPolicy = ConfigurationPolicy.FACTORY,
     label = "Everit OAuth2 Authentication Servlet Component",
     description = "Implements OAuth2-based authentication mechanism as a Servlet. "
         + "Registers a javax.servlet.Servlet OSGi Service.")
-@ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
-    value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @StringAttributes({
     @StringAttribute(attributeId = Constants.SERVICE_DESCRIPTION,
         defaultValue = OAuth2AuthenticationServletConstants.DEFAULT_SERVICE_DESCRIPTION,
@@ -67,7 +65,7 @@ import aQute.bnd.annotation.headers.ProvideCapability;
             + "(2) is stored in the session to be able to identify the current provider; "
             + "(3) can be used to filter and wire the OSGi services belonging to the same provider,"
             + " for e.g.: (oauth2.provider.name=google).") })
-@ManualService(Servlet.class)
+@ManualServices(@ManualService(Servlet.class))
 public class OAuth2AuthenticationServletComponent {
 
   public static final int P01_SERVICE_DESCRIPTION = 1;

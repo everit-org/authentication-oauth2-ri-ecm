@@ -42,7 +42,7 @@ import org.everit.osgi.ecm.annotation.Component;
 import org.everit.osgi.ecm.annotation.Service;
 import org.everit.osgi.ecm.annotation.ServiceRef;
 import org.everit.osgi.ecm.annotation.attribute.StringAttribute;
-import org.everit.osgi.ecm.extender.ECMExtenderConstants;
+import org.everit.osgi.ecm.extender.ExtendComponent;
 import org.everit.persistence.querydsl.support.QuerydslSupport;
 import org.osgi.framework.BundleContext;
 
@@ -51,14 +51,11 @@ import com.google.gson.JsonObject;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 
-import aQute.bnd.annotation.headers.ProvideCapability;
-
 /**
  * Servlet that shows the welcome.html page.
  */
+@ExtendComponent
 @Component
-@ProvideCapability(ns = ECMExtenderConstants.CAPABILITY_NS_COMPONENT,
-    value = ECMExtenderConstants.CAPABILITY_ATTR_CLASS + "=${@class}")
 @Service(value = { Servlet.class, WelcomeServletComponent.class })
 public class WelcomeServletComponent extends AbstractServlet {
 
